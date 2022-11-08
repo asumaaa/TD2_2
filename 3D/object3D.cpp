@@ -89,7 +89,7 @@ void Object3D::Initialize(DirectXCommon* dx, Model* model)
 	HRESULT result;
 
 	// 定数バッファの生成
-	result = dx->GetDevice()->CreateCommittedResource(
+	result = this->dx->GetDevice()->CreateCommittedResource(
 		&heapProps, // アップロード可能
 		D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
 		IID_PPV_ARGS(&constBuffB0));
@@ -100,7 +100,7 @@ void Object3D::Initialize(DirectXCommon* dx, Model* model)
 		CD3DX12_RESOURCE_DESC::Buffer((sizeof(ConstBufferDataB1) + 0xff) & ~0xff);
 
 	// 定数バッファの生成
-	result = dx->GetDevice()->CreateCommittedResource(
+	result = this->dx->GetDevice()->CreateCommittedResource(
 		&heapProps, // アップロード可能
 		D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
 		IID_PPV_ARGS(&constBuffB1));
@@ -173,6 +173,21 @@ void Object3D::Draw(D3D12_VERTEX_BUFFER_VIEW& vbView,D3D12_INDEX_BUFFER_VIEW& ib
 	cmdList->SetGraphicsRootDescriptorTable(2, model->GetSrv());
 	// 描画コマンド
 	cmdList->DrawIndexedInstanced(model->GetIndicesSize(), 1, 0, 0, 0);
+}
+
+void Object3D::setPosition(XMFLOAT3 pos)
+{
+	position = pos;
+}
+
+void Object3D::setRotation(XMFLOAT3 rot)
+{
+	rotation = rot;
+}
+
+void Object3D::setScale(XMFLOAT3 sca)
+{
+	scale = sca;
 }
 
 Object3D* Object3D::GetInstance()

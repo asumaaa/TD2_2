@@ -8,6 +8,7 @@
 #include "Texture.h"
 #include "Model.h"
 #include "Object3D.h"
+#include "Player.h"
 
 class GameScene
 {
@@ -25,8 +26,11 @@ private:
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
 
-	//モデル
-	std::unique_ptr<Model> model_;
+	//プレイヤーのモデル
+	std::unique_ptr<Model> playerModel_;
+
+	//プレイヤー
+	std::unique_ptr<Player> player_;
 
 	//オブジェクト
 	std::unique_ptr<Object3D> object3Ds_;

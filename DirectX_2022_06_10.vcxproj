@@ -153,6 +153,7 @@
     <ClCompile Include="input\input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3D\object3D.h" />
@@ -165,6 +166,7 @@
     <ClInclude Include="input\input.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="Player.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="BasicPS.hlsl">
