@@ -11,6 +11,7 @@
 #include "Player.h"
 #include "Sound.h"
 #include "Camera.h"
+#include "StarDust.h"
 
 class GameScene
 {
@@ -21,6 +22,7 @@ public:
 	void Initialize(DirectXCommon* dxCommon, Input* input);
 	void Update();
 	void Draw();
+	void Delete();
 
 	//メンバ変数
 private: 
@@ -37,18 +39,11 @@ private:
 	//オブジェクト
 	std::unique_ptr<Object3D> object3Ds_;
 
-	////射影変換
-	//XMMATRIX matProjection = XMMatrixPerspectiveFovLH(
-	//	XMConvertToRadians(45.0f),			//上下画角45度
-	//	(float)window_width / window_height,//アスペクト比(画面横幅/画面立幅)
-	//	0.1f, 1000.0f						//前端、奥端
-	//);
+	//星屑のモデル
+	std::unique_ptr<Model> starDustModel_;
 
-	////ビュー変換行列
-	//XMMATRIX matView;
-	//XMFLOAT3 eye = { -10, 10, 30 };
-	//XMFLOAT3 target = { 0, 0, 0 };
-	//XMFLOAT3 up = { 0, 1, 0 };
+	//星屑
+	std::unique_ptr<StarDust> starDust_;
 
 	//カメラ
 	std::unique_ptr<Camera> camera_;

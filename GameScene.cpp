@@ -7,6 +7,11 @@ GameScene::GameScene()
 
 GameScene::~GameScene()
 {
+	/*delete starDust_.get();
+	delete starDustModel_.get();
+	delete playerModel_.get();
+	delete player_.get();
+	delete camera_.get();*/
 }
 
 void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
@@ -24,8 +29,17 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 	newPlayer->Initialize(dxCommon, playerModel_.get());
 	player_.reset(newPlayer);
 
+	//¯‹û‚Ìƒ‚ƒfƒ‹‚Ì‰Šú‰»
+	Model* newStarModel = new Model();
+	newStarModel->Initialize(dxCommon_, "star", "Resources/star.png");
+	starDustModel_.reset(newStarModel);
+
+	//¯‹û‰Šú‰»
+	StarDust* newStarDust = new StarDust();
+	newStarDust->Initialize(dxCommon_, starDustModel_.get());
+	starDust_.reset(newStarDust);
+
 	//ƒJƒƒ‰‰Šú‰»
-	/*matView = XMMatrixLookAtLH(XMLoadFloat3(&eye), XMLoadFloat3(&target), XMLoadFloat3(&up));*/
 	Camera* newCamera = new Camera();
 	newCamera->Initialize(input_, player_.get());
 	camera_.reset(newCamera);
@@ -37,10 +51,22 @@ void GameScene::Update()
 	XMMATRIX matView = camera_->GetMatView();
 	XMMATRIX matProjection = camera_->GetMatProjection();
 
+	starDust_->Update(matView, matProjection);
 	player_->Update(matView, matProjection);
 }
 
 void GameScene::Draw()
 {
+	starDust_->Draw();
 	player_->Draw();
+}
+
+void GameScene::Delete()
+{
+	starDust_->Delete();
+	delete starDust_.get();
+	delete starDustModel_.get();
+	delete playerModel_.get();
+	delete player_.get();
+	delete camera_.get();
 }

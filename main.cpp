@@ -49,13 +49,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 #pragma endregion
 
-
 		//Xボタンで終了メッセ時が来たらゲームループを抜ける 
 		if (masage->ExitGameloop() == 1)
 		{
+			gameScene->Delete();
 			break;
 		}
-
 		//ウィンドウクラスを登録解除
 		win->deleteWindow();
 	}
