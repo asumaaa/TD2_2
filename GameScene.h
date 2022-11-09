@@ -10,6 +10,7 @@
 #include "Object3D.h"
 #include "Player.h"
 #include "Sound.h"
+#include "Camera.h"
 
 class GameScene
 {
@@ -36,16 +37,19 @@ private:
 	//オブジェクト
 	std::unique_ptr<Object3D> object3Ds_;
 
-	//射影変換
-	XMMATRIX matProjection = XMMatrixPerspectiveFovLH(
-		XMConvertToRadians(45.0f),			//上下画角45度
-		(float)window_width / window_height,//アスペクト比(画面横幅/画面立幅)
-		0.1f, 1000.0f						//前端、奥端
-	);
+	////射影変換
+	//XMMATRIX matProjection = XMMatrixPerspectiveFovLH(
+	//	XMConvertToRadians(45.0f),			//上下画角45度
+	//	(float)window_width / window_height,//アスペクト比(画面横幅/画面立幅)
+	//	0.1f, 1000.0f						//前端、奥端
+	//);
 
-	//ビュー変換行列
-	XMMATRIX matView;
-	XMFLOAT3 eye = { -10, 10, 30 };
-	XMFLOAT3 target = { 0, 0, 0 };
-	XMFLOAT3 up = { 0, 1, 0 };
+	////ビュー変換行列
+	//XMMATRIX matView;
+	//XMFLOAT3 eye = { -10, 10, 30 };
+	//XMFLOAT3 target = { 0, 0, 0 };
+	//XMFLOAT3 up = { 0, 1, 0 };
+
+	//カメラ
+	std::unique_ptr<Camera> camera_;
 };

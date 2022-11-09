@@ -25,11 +25,18 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 	player_.reset(newPlayer);
 
 	//ƒJƒƒ‰‰Šú‰»
-	matView = XMMatrixLookAtLH(XMLoadFloat3(&eye), XMLoadFloat3(&target), XMLoadFloat3(&up));
+	/*matView = XMMatrixLookAtLH(XMLoadFloat3(&eye), XMLoadFloat3(&target), XMLoadFloat3(&up));*/
+	Camera* newCamera = new Camera();
+	newCamera->Initialize(input_, player_.get());
+	camera_.reset(newCamera);
 }
 
 void GameScene::Update()
 {
+	camera_->Update();
+	XMMATRIX matView = camera_->GetMatView();
+	XMMATRIX matProjection = camera_->GetMatProjection();
+
 	player_->Update(matView, matProjection);
 }
 

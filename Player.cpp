@@ -28,7 +28,7 @@ void Player::Initialize(DirectXCommon* dx,Model* model)
 
 void Player::Update(XMMATRIX& matView, XMMATRIX& matProjection)
 {
-	position_.x += 0.02;
+	position_.z += 0.02;
 
 
 
