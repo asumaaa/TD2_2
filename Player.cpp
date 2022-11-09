@@ -28,8 +28,13 @@ void Player::Initialize(DirectXCommon* dx,Model* model)
 
 void Player::Update(XMMATRIX& matView, XMMATRIX& matProjection)
 {
-	/*position_.x += 0.02;
-	object3d_->setPosition(position_);*/
+	position_.x += 0.02;
+
+
+
+	object3d_->setPosition(position_);
+	object3d_->setRotation(rotation_);
+	object3d_->setScale(scale_);
 	//オブジェクト更新
 	object3d_->Update(matView, matProjection);
 }

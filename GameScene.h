@@ -9,6 +9,7 @@
 #include "Model.h"
 #include "Object3D.h"
 #include "Player.h"
+#include "Sound.h"
 
 class GameScene
 {
