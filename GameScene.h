@@ -30,21 +30,21 @@ private:
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
 
-	//プレイヤーのモデル
-	std::unique_ptr<Model> playerModel_;
+	////プレイヤーのモデル
+	//std::unique_ptr<Model> playerModel_;
 
-	//プレイヤー
-	std::unique_ptr<Player> player_;
+	////プレイヤー
+	//std::unique_ptr<Player> player_;
 
-	//オブジェクト
-	std::unique_ptr<Object3D> object3Ds_;
+	////オブジェクト
+	//std::unique_ptr<Object3D> object3Ds_;
 
-	//星屑のモデル
-	std::unique_ptr<Model> starDustModel_;
+	////星屑のモデル
+	//std::unique_ptr<Model> starDustModel_;
 
-	//星屑
-	std::unique_ptr<StarDust> starDust_;
+	////星屑
+	//std::unique_ptr<StarDust> starDust_;
 
-	//カメラ
-	std::unique_ptr<Camera> camera_;
+	////カメラ
+	//std::unique_ptr<Camera> camera_;
 };
