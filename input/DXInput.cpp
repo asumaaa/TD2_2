@@ -46,27 +46,27 @@ void DXInput::InputProcess() {
     }
 
     // ゲームパッドの振動
-    XInputSetState(0, &GamePad.vibration);
+    /*XInputSetState(0, &GamePad.vibration);*/
  
     if (pad_A)
     {
         GamePad.vibration.wLeftMotorSpeed = MaxVibration;
-        XInputSetState(0, &GamePad.vibration);
+        /*XInputSetState(0, &GamePad.vibration);*/
     }
     if (pad_B)
     {
         GamePad.vibration.wRightMotorSpeed = MaxVibration;
-        XInputSetState(0, &GamePad.vibration);
+        /*XInputSetState(0, &GamePad.vibration);*/
     }
     if (pad_X)
     {
         GamePad.vibration.wLeftMotorSpeed = MaxVibration;
-        XInputSetState(0, &GamePad.vibration);
+       /* XInputSetState(0, &GamePad.vibration);*/
     }
     if (pad_Y)
     {
         GamePad.vibration.wRightMotorSpeed = MaxVibration;
-        XInputSetState(0, &GamePad.vibration);
+        /*XInputSetState(0, &GamePad.vibration);*/
     }
 
     /*WCHAR wcText[256] = { 0 };

@@ -43,11 +43,13 @@ void Camera::Update()
 
 void Camera::homind()
 {
-	float x, y, z;
+	float x = 0;
+	float y = 0;
+	float z = 0;
 
 	//カメラをプレイヤーの真後ろに移動
 	x = player_->GetPosition().x + (sin(-player_->GetRotation().x + (PI / 2)) * cos(-player_->GetRotation().y - (PI / 2)) * length_);
-	y = player_->GetPosition().y + (cos(-player_->GetRotation().x + (PI * 9/20))* length_);
+	y = player_->GetPosition().y + (cos(-player_->GetRotation().x + (PI * 9/20)) * length_);
 	z = player_->GetPosition().z + (sin(-player_->GetRotation().x + (PI / 2)) * sin(-player_->GetRotation().y - (PI / 2)) * length_);
 
 	//天井を調整

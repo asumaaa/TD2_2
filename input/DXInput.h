@@ -40,7 +40,7 @@ public:// ƒƒ“ƒoŠÖ”
     /*HRESULT UpdateCountrollerState();*/
 
 private:// ƒƒ“ƒo•Ï”
-    WinApp* winApp = nullptr;    // WindowsAPI
+    //WinApp* winApp = nullptr;    // WindowsAPI
 
 private:
     static int  pad_A, pad_B, pad_X, pad_Y;

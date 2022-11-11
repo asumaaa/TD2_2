@@ -12,6 +12,7 @@
 #include "Sound.h"
 #include "Camera.h"
 #include "StarDust.h"
+#include "DXInput.h"
 
 class GameScene
 {
@@ -29,6 +30,9 @@ private:
 	//デバイスとinput
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
+
+	//コントローラ
+	DXInput* dxInput = new DXInput();
 
 	//プレイヤーのモデル
 	std::unique_ptr<Model> playerModel_;

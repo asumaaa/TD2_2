@@ -7,6 +7,7 @@ GameScene::GameScene()
 
 GameScene::~GameScene()
 {
+	delete dxInput;
 	/*delete starDust_.get();
 	delete starDustModel_.get();
 	delete playerModel_.get();
@@ -26,7 +27,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 
 	//プレイヤー初期化
 	Player* newPlayer = new Player();
-	newPlayer->Initialize(dxCommon, playerModel_.get());
+	newPlayer->Initialize(dxCommon, playerModel_.get(),dxInput);
 	player_.reset(newPlayer);
 
 	//星屑のモデルの初期化
@@ -47,10 +48,22 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 
 void GameScene::Update()
 {
+	//コントローラー更新
+	dxInput->InputProcess();
+
+	//カメラ更新
 	camera_->Update();
 	XMMATRIX matView = camera_->GetMatView();
 	XMMATRIX matProjection = camera_->GetMatProjection();
 
+	//デバッグ用
+	/*XMFLOAT3 eye_(0,5,-30);
+	XMFLOAT3 target_(0,0,0);
+	XMFLOAT3 up_(0,1,0);
+	XMMATRIX matView = XMMatrixLookAtLH(XMLoadFloat3(&eye_), XMLoadFloat3(&target_), XMLoadFloat3(&up_));*/
+
+
+	//オブジェクト更新
 	starDust_->Update(matView, matProjection);
 	player_->Update(matView, matProjection);
 }

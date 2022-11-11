@@ -1,5 +1,6 @@
 #include "main.h"
 #include "FPS.h"
+#include "DXInput.h"
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {

@@ -28,9 +28,9 @@ void StarDust::Initialize(DirectXCommon* dx, Model* model)
 	//èâä˙ílê›íË
 	for (int i = 0; i < starDustNum; i++)
 	{
-		position_[i].x = static_cast<float>(rand() % 100 - 50);
-		position_[i].y = static_cast<float>(rand() % 100 - 50);
-		position_[i].z = static_cast<float>(rand() % 100 - 50);
+		position_[i].x = static_cast<float>(rand() % 200 - 100);
+		position_[i].y = static_cast<float>(rand() % 200 - 100);
+		position_[i].z = static_cast<float>(rand() % 200 - 100);
 		scale_[i] = { starDustScale,starDustScale,starDustScale };
 		rotation_[i] = { 0.0f,0.0f,0.0f };
 	}
