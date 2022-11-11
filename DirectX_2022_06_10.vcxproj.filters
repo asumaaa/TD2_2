@@ -81,6 +81,9 @@
     <ClCompile Include="input\DXInput.cpp">
       <Filter>ソース ファイル\input</Filter>
     </ClCompile>
+    <ClCompile Include="base\FPS.cpp">
+      <Filter>ソース ファイル\base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -130,6 +133,9 @@
     </ClInclude>
     <ClInclude Include="input\DXInput.h">
       <Filter>ヘッダー ファイル\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="base\FPS.h">
+      <Filter>ヘッダー ファイル\base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

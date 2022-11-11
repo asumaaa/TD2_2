@@ -145,6 +145,7 @@
   <ItemGroup>
     <ClCompile Include="3D\object3D.cpp" />
     <ClCompile Include="base\DirectXCommon.cpp" />
+    <ClCompile Include="base\FPS.cpp" />
     <ClCompile Include="base\Masage.cpp" />
     <ClCompile Include="base\Texture.cpp" />
     <ClCompile Include="base\WinApp.cpp" />
@@ -163,6 +164,7 @@
   <ItemGroup>
     <ClInclude Include="3D\object3D.h" />
     <ClInclude Include="base\DirectXCommon.h" />
+    <ClInclude Include="base\FPS.h" />
     <ClInclude Include="base\Masage.h" />
     <ClInclude Include="base\Texture.h" />
     <ClInclude Include="base\WinApp.h" />

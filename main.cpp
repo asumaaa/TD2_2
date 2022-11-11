@@ -1,4 +1,5 @@
 #include "main.h"
+#include "FPS.h"
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
@@ -24,6 +25,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	GameScene* gameScene = nullptr;
 	gameScene = new GameScene();
 	gameScene->Initialize(dx, input);
+
+	//FPSを固定
+	FPS* fps = nullptr;
+	fps = new FPS;
+	fps->SetFrameRate(60.0f);
+	fps->FpsControlBegin();;
 
 #pragma endregion
 
@@ -56,6 +63,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 			break;
 		}
 	}
+	
+	//FPS固定を解除
+	fps->FpsControlEnd();
+	delete fps;
 
 	//ウィンドウクラスを登録解除
 	win->deleteWindow();
