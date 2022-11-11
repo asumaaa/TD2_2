@@ -27,7 +27,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 #pragma endregion
 
-	//ゲームループ
+		//ゲームループ
 	while (true)
 	{
 		//メッセージがある？
@@ -52,12 +52,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		//Xボタンで終了メッセ時が来たらゲームループを抜ける 
 		if (masage->ExitGameloop() == 1)
 		{
-			gameScene->Delete();
+			/*gameScene->Delete();*/
 			break;
 		}
-		//ウィンドウクラスを登録解除
-		win->deleteWindow();
 	}
+
+	//ウィンドウクラスを登録解除
+	win->deleteWindow();
 
 	return 0;
 }

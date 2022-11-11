@@ -33,6 +33,7 @@ public:
 	//•`‰æ
 	void PreDraw();		//•`‰æ‘O
 	void PostDraw();	//•`‰æŒã 
+	void Finalize();
 	//ƒQƒbƒ^[
 	ID3D12Device* GetDevice() { return device.Get(); }
 	IDXGISwapChain4* GetSwapChain() { return swapChain.Get(); }

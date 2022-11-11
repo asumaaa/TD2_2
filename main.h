@@ -4,7 +4,6 @@
 #include "input.h"
 #include "Masage.h"
 #include "Texture.h"
-#include "Sphere.h"
 
 #include "string"
 #include "DirectXMath.h"

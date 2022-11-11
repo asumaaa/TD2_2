@@ -22,7 +22,9 @@ private:
 	Model* model_;
 
 	//¯‹û‚Ì”
-	int starDustNum = 100;
+	int starDustNum = 2000;
+	//¯‹û‚Ì‘å‚«‚³
+	float starDustScale = 0.03;
 
 	/*std::vector<ComPtr<Object3D>> object3ds_;*/
 	std::list<std::unique_ptr<Object3D>> object3Ds_;

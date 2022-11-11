@@ -31,7 +31,7 @@ void StarDust::Initialize(DirectXCommon* dx, Model* model)
 		position_[i].x = static_cast<float>(rand() % 100 - 50);
 		position_[i].y = static_cast<float>(rand() % 100 - 50);
 		position_[i].z = static_cast<float>(rand() % 100 - 50);
-		scale_[i] = { 0.05f,0.05f,0.05f };
+		scale_[i] = { starDustScale,starDustScale,starDustScale };
 		rotation_[i] = { 0.0f,0.0f,0.0f };
 	}
 	//オブジェクト初期化
@@ -70,8 +70,23 @@ void StarDust::Draw()
 
 void StarDust::Delete()
 {
+	/*auto itr = object3Ds_.begin();*/
+	/*object3Ds_.clear();
+	while (itr != object3Ds_.end())
+	{
+		object3Ds_.erase(itr);
+		itr++;
+	}*/
 	/*for (std::unique_ptr<Object3D>& object : object3Ds_)
 	{
-		delete& object3Ds_;
+		object.reset();
+	}*/
+
+	/*auto i = object3Ds_.begin();
+	auto e = object3Ds_.end();
+	for (int a = 0; a < 10; a++)
+	{
+		object3Ds_.erase(i);
+		i++;
 	}*/
 }
