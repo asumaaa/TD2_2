@@ -27,6 +27,9 @@ void Player::Initialize(DirectXCommon* dx,Model* model, DXInput* dxInput)
 	Object3D* newObject = new Object3D();
 	newObject->Initialize(dx_, model_);
 	object3d_.reset(newObject);
+
+	/*rotation1_.x = PI / 2;
+	rotation2_.x = PI / 2;*/
 }
 
 void Player::Update(XMMATRIX& matView, XMMATRIX& matProjection)
@@ -39,35 +42,106 @@ void Player::Update(XMMATRIX& matView, XMMATRIX& matProjection)
 
 	Move();
 
-	object3d_->setPosition(position_);
-	object3d_->setRotation(rotation2_);
 	object3d_->setScale(scale_);
+	object3d_->setRotation(rotation2_);
+	object3d_->setPosition(position_);
 	//オブジェクト更新
 	object3d_->Update(matView, matProjection);
 }
 
 void Player::Move()
 {
+	XMFLOAT3 velocity(0, 0, speed);
 	//コントローラーの入力によって傾ける
-	float x = dxInput_->GamePad.state.Gamepad.sThumbLY / (32767.0f) * (PI / 90.0f);
-	rotation1_.x -= x;
-	rotation2_.x -= x;
+	/*float x = dxInput_->GamePad.state.Gamepad.sThumbLY / (32767.0f) * (PI / 90.0f);
+	if (dxInput_->GamePad.state.Gamepad.sThumbLY > 15000 || dxInput_->GamePad.state.Gamepad.sThumbLY < -15000)
+	{
+		rotation1_.x -= x;
+		rotation2_.x -= x;
+	}*/
 
 	//左スティックで機体を傾ける処理
-	float z = -dxInput_->GamePad.state.Gamepad.sThumbLX / (32767.0f) * (PI / 90.0f);
-	if (dxInput_->GamePad.state.Gamepad.sThumbLX != 0)
+	//float z = -dxInput_->GamePad.state.Gamepad.sThumbLX / (32767.0f) * (PI / 90.0f);
+	//if (dxInput_->GamePad.state.Gamepad.sThumbLX > 15000 || dxInput_->GamePad.state.Gamepad.sThumbLX < -15000)
+	//{
+	//	if (rotation2_.z < PI / 6 && rotation2_.z > -PI / 6)
+	//	{
+	//		rotation2_.z += z;
+	//	}
+	//	if (rotation2_.z > PI / 6)
+	//	{
+	//		rotation2_.z = PI / 6 - z;
+	//	}
+	//	if (rotation2_.z < -PI / 6)
+	//	{
+	//		rotation2_.z = -PI / 6 + z;
+	//	}
+	//}
+	////ステックに触っていないときの処理
+	//else if (rotation2_.z != 0)
+	//{
+	//	if (rotation2_.z < -(PI / 90.0f))
+	//	{
+	//		rotation2_.z += (PI / 90.0f);
+	//	}
+	//	else if(rotation2_.z > (PI / 90.0f))
+	//	{
+	//		rotation2_.z -= (PI / 90.0f);
+	//	}
+	//}
+
+	//左ステックの変数
+	float x = dxInput_->GamePad.state.Gamepad.sThumbLY / (32767.0f) * (PI / 90.0f);
+	float y = dxInput_->GamePad.state.Gamepad.sThumbLX / (32767.0f) * (PI / 90.0f);
+	//上下
+	if (dxInput_->GamePad.state.Gamepad.sThumbLY > 15000 || dxInput_->GamePad.state.Gamepad.sThumbLY < -15000)
+	{
+		if (rotation1_.x < PI / 4 && rotation1_.x > -PI / 4)
+		{
+			rotation1_.x -= x;
+			rotation2_.x -= x;
+		}
+		if (rotation1_.x > PI / 4)
+		{
+			rotation1_.x = PI / 4 - x;
+			rotation2_.x = PI / 4 - x;
+		}
+		if (rotation1_.x < -PI / 4)
+		{
+			rotation1_.x = -PI / 4 + x;
+			rotation2_.x = -PI / 4 + x;
+		}
+	}
+	//左右
+	if (dxInput_->GamePad.state.Gamepad.sThumbLX > 15000 || dxInput_->GamePad.state.Gamepad.sThumbLX < -15000)
+	{
+		if (sin(rotation1_.x + (PI / 2) >= 0))
+		{
+			velocity = { speed * 3 / 10,  0, speed * 7 / 10 };
+			rotation1_.y += y;
+			rotation2_.y += y;
+		}
+		else
+		{
+			velocity = { -speed * 3 / 10,  0, speed * 7 / 10 };
+			rotation1_.y -= y;
+			rotation2_.y -= y;
+		}
+	}
+	//左スティックで機体を傾ける処理
+	if (dxInput_->GamePad.state.Gamepad.sThumbLX > 15000 || dxInput_->GamePad.state.Gamepad.sThumbLX < -15000)
 	{
 		if (rotation2_.z < PI / 6 && rotation2_.z > -PI / 6)
 		{
-			rotation2_.z += z;
+			rotation2_.z -= y;
 		}
 		if (rotation2_.z > PI / 6)
 		{
-			rotation2_.z = PI / 6 - z;
+			rotation2_.z = PI / 6 - y;
 		}
 		if (rotation2_.z < -PI / 6)
 		{
-			rotation2_.z = -PI / 6 + z;
+			rotation2_.z = -PI / 6 + y;
 		}
 	}
 	//ステックに触っていないときの処理
@@ -77,29 +151,15 @@ void Player::Move()
 		{
 			rotation2_.z += (PI / 90.0f);
 		}
-		else if(rotation2_.z > (PI / 90.0f))
+		else if (rotation2_.z > (PI / 90.0f))
 		{
 			rotation2_.z -= (PI / 90.0f);
 		}
 	}
 
-	//左ステックで機体の角度を変えて進行方向を変更
-	if (dxInput_->GamePad.state.Gamepad.sThumbLX != 0)
-	{
-		if (sin(rotation1_.x + (PI / 2) >= 0))
-		{
-			rotation1_.y += dxInput_->GamePad.state.Gamepad.sThumbLX / (32767.0f) * (PI / 90.0f);
-			rotation2_.y += dxInput_->GamePad.state.Gamepad.sThumbLX / (32767.0f) * (PI / 90.0f);
-		}
-		else
-		{
-			rotation1_.y -= dxInput_->GamePad.state.Gamepad.sThumbLX / (32767.0f) * (PI / 90.0f);
-			rotation2_.y -= dxInput_->GamePad.state.Gamepad.sThumbLX / (32767.0f) * (PI / 90.0f);
-		}
-	}
 
 	//直進
-	XMFLOAT3 velocity(0, 0, speed);
+	/*XMFLOAT3 velocity(0, 0, speed);*/
 	rollRotation(&velocity, rotation1_ );
 
 	position_.x += velocity.x * speed;

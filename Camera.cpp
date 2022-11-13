@@ -49,8 +49,12 @@ void Camera::homind()
 
 	//カメラをプレイヤーの真後ろに移動
 	x = player_->GetPosition().x + (sin(-player_->GetRotation().x + (PI / 2)) * cos(-player_->GetRotation().y - (PI / 2)) * length_);
-	y = player_->GetPosition().y + (cos(-player_->GetRotation().x + (PI * 9/20)) * length_);
+	y = player_->GetPosition().y + (cos(-player_->GetRotation().x + (PI * 19/40)) * length_);
 	z = player_->GetPosition().z + (sin(-player_->GetRotation().x + (PI / 2)) * sin(-player_->GetRotation().y - (PI / 2)) * length_);
+
+	/*x = player_->GetPosition().x + (cos(-player_->GetRotation().x + (PI * 19 / 40)) * length_);
+	y = player_->GetPosition().y + (sin(-player_->GetRotation().x + (PI / 2)) * sin(-player_->GetRotation().y - (PI / 2)) * length_);
+	z = player_->GetPosition().z + (sin(-player_->GetRotation().x + (PI / 2)) * cos(-player_->GetRotation().y - (PI / 2)) * length_);*/
 
 	//天井を調整
 	if (sin(-player_->GetRotation().x + (PI / 2)) <= 0)
@@ -61,6 +65,7 @@ void Camera::homind()
 	{
 		up_ = { 0,1,0 };
 	}
+	up_ = { 0,1,0 };
 
 	//カメラの座標に代入
 	eye_ = { x,y,z };
