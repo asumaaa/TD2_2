@@ -80,9 +80,9 @@ void Object3D::Draw(D3D12_VERTEX_BUFFER_VIEW& vbView,D3D12_INDEX_BUFFER_VIEW& ib
 {
 	this->cmdList = dx->GetCommandList();
 	// パイプラインステートの設定
-	cmdList->SetPipelineState(model->GetPipelinestate().Get());
+	cmdList->SetPipelineState(model->GetPipelinestate());
 	// ルートシグネチャの設定
-	cmdList->SetGraphicsRootSignature(model->GetRootSignature().Get());
+	cmdList->SetGraphicsRootSignature(model->GetRootSignature());
 	// プリミティブ形状を設定
 	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	// 頂点バッファの設定
@@ -91,7 +91,7 @@ void Object3D::Draw(D3D12_VERTEX_BUFFER_VIEW& vbView,D3D12_INDEX_BUFFER_VIEW& ib
 	cmdList->IASetIndexBuffer(&ibView);
 
 	// デスクリプタヒープの配列
-	ID3D12DescriptorHeap* ppHeaps[] = { model->GetDescHeap().Get()};
+	ID3D12DescriptorHeap* ppHeaps[] = { model->GetDescHeap()};
 	cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
 
 	// 定数バッファビューをセット

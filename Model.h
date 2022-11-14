@@ -69,9 +69,9 @@ public:
 	void Update();
 	//ÉQÉbÉ^Å[
 	Material GetMaterial() { return material; };
-	ComPtr<ID3D12DescriptorHeap> GetDescHeap() { return descHeap; };
-	ComPtr<ID3D12PipelineState> GetPipelinestate() { return pipelinestate; };
-	ComPtr<ID3D12RootSignature> GetRootSignature() { return rootsignature; };
+	ID3D12DescriptorHeap* GetDescHeap() { return descHeap.Get(); };
+	ID3D12PipelineState* GetPipelinestate() { return pipelinestate.Get(); };
+	ID3D12RootSignature* GetRootSignature() { return rootsignature.Get(); };
 	CD3DX12_GPU_DESCRIPTOR_HANDLE GetSrv() { return gpuDescHandleSRV; };
 	UINT GetIndicesSize() { return indices.size(); };
 public:

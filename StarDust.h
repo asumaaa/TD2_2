@@ -24,9 +24,8 @@ private:
 	//¯‹û‚Ì”
 	int starDustNum = 1000;
 	//¯‹û‚Ì‘å‚«‚³
-	float starDustScale = 0.15;
+	float starDustScale = 0.2;
 
-	/*std::vector<ComPtr<Object3D>> object3ds_;*/
 	std::list<std::unique_ptr<Object3D>> object3Ds_;
 
 	std::vector<XMFLOAT3> position_;
