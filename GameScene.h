@@ -12,6 +12,7 @@
 #include "Sound.h"
 #include "Camera.h"
 #include "StarDust.h"
+#include "Smoke.h"
 #include "DXInput.h"
 
 class GameScene
@@ -39,6 +40,9 @@ private:
 
 	//プレイヤー
 	std::unique_ptr<Player> player_;
+
+	//プレイヤーの煙
+	std::unique_ptr<Smoke> smoke_;
 
 	//オブジェクト
 	std::unique_ptr<Object3D> object3Ds_;

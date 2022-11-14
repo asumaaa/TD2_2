@@ -31,11 +31,6 @@ void Player::Initialize(DirectXCommon* dx,Model* model, DXInput* dxInput)
 
 void Player::Update(XMMATRIX& matView, XMMATRIX& matProjection)
 {
-	/*position_.z += 0.02;*/
-	/*if (dxInput_->GamePad.state.Gamepad.wButtons == XINPUT_GAMEPAD_DPAD_LEFT)
-	{
-		position_.z += 0.02;
-	}*/
 
 	Move();
 
@@ -49,43 +44,6 @@ void Player::Update(XMMATRIX& matView, XMMATRIX& matProjection)
 void Player::Move()
 {
 	XMFLOAT3 velocity(0, 0, speed);
-	//コントローラーの入力によって傾ける
-	/*float x = dxInput_->GamePad.state.Gamepad.sThumbLY / (32767.0f) * (PI / 90.0f);
-	if (dxInput_->GamePad.state.Gamepad.sThumbLY > 15000 || dxInput_->GamePad.state.Gamepad.sThumbLY < -15000)
-	{
-		rotation1_.x -= x;
-		rotation2_.x -= x;
-	}*/
-
-	//左スティックで機体を傾ける処理
-	//float z = -dxInput_->GamePad.state.Gamepad.sThumbLX / (32767.0f) * (PI / 90.0f);
-	//if (dxInput_->GamePad.state.Gamepad.sThumbLX > 15000 || dxInput_->GamePad.state.Gamepad.sThumbLX < -15000)
-	//{
-	//	if (rotation2_.z < PI / 6 && rotation2_.z > -PI / 6)
-	//	{
-	//		rotation2_.z += z;
-	//	}
-	//	if (rotation2_.z > PI / 6)
-	//	{
-	//		rotation2_.z = PI / 6 - z;
-	//	}
-	//	if (rotation2_.z < -PI / 6)
-	//	{
-	//		rotation2_.z = -PI / 6 + z;
-	//	}
-	//}
-	////ステックに触っていないときの処理
-	//else if (rotation2_.z != 0)
-	//{
-	//	if (rotation2_.z < -(PI / 90.0f))
-	//	{
-	//		rotation2_.z += (PI / 90.0f);
-	//	}
-	//	else if(rotation2_.z > (PI / 90.0f))
-	//	{
-	//		rotation2_.z -= (PI / 90.0f);
-	//	}
-	//}
 
 	//左ステックの変数
 	float x = dxInput_->GamePad.state.Gamepad.sThumbLY / (32767.0f) * (PI / 90.0f);

@@ -35,6 +35,11 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 	newStarModel->Initialize(dxCommon_, "star", "Resources/star.png");
 	starDustModel_.reset(newStarModel);
 
+	//プレイヤーの煙初期化
+	Smoke* newSmoke = new Smoke();
+	newSmoke->Initialize(dxCommon_, starDustModel_.get(), player_->GetPosition());
+	smoke_.reset(newSmoke);
+
 	//星屑初期化
 	StarDust* newStarDust = new StarDust();
 	newStarDust->Initialize(dxCommon_, starDustModel_.get());
@@ -66,12 +71,14 @@ void GameScene::Update()
 	//オブジェクト更新
 	starDust_->Update(matView, matProjection);
 	player_->Update(matView, matProjection);
+	smoke_->Update(matView, matProjection,player_->GetPosition(), player_->GetRotation());
 }
 
 void GameScene::Draw()
 {
 	starDust_->Draw();
 	player_->Draw();
+	smoke_->Draw();
 }
 
 void GameScene::Delete()

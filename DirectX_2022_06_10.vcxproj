@@ -159,7 +159,7 @@
     <ClCompile Include="Matrix4.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="PlayerEffect.cpp" />
+    <ClCompile Include="Smoke.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="StarDust.cpp" />
   </ItemGroup>
@@ -180,7 +180,7 @@
     <ClInclude Include="Matrix4.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="PlayerEffect.h" />
+    <ClInclude Include="Smoke.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="StarDust.h" />
   </ItemGroup>

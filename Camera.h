@@ -43,7 +43,7 @@ private:
 	XMFLOAT3 up_ = { 0, 1, 0 };
 	//プレイヤーの後ろをつける挙動
 	//プレイヤーとカメラの距離
-	float length_ = 30.0f;
+	float length_ = 40.0f;
 	//入力によって加算させる変数
 	float lengthX_ = 0.0f;
 	float lengthZ_ = 0.0f;

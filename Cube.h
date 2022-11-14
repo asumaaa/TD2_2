@@ -1,18 +1,18 @@
-#pragma once
-#include "DirectXCommon.h"
-#include "Object3D.h"
-#include "d3d12.h"
-#include "list"
-#include "vector"
-#include "d3dcompiler.h"
-
-using namespace DirectX;
-using namespace Microsoft::WRL;
-
-#pragma comment(lib,"d3dcompiler.lib")
-#pragma comment(lib,"dinput8.lib")
-
-#define PI 3.14159265359
+//#pragma once
+//#include "DirectXCommon.h"
+//#include "Object3D.h"
+//#include "d3d12.h"
+//#include "list"
+//#include "vector"
+//#include "d3dcompiler.h"
+//
+//using namespace DirectX;
+//using namespace Microsoft::WRL;
+//
+//#pragma comment(lib,"d3dcompiler.lib")
+//#pragma comment(lib,"dinput8.lib")
+//
+//#define PI 3.14159265359
 
 //class Cube
 //{
