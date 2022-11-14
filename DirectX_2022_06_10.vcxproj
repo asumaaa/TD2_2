@@ -118,7 +118,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(projectDir)input;$(projectDir);$(projectDir)3D;$(projectDir)base;$(projectDir)imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(projectDir)input;$(projectDir);$(projectDir)3D;$(projectDir)base;$(projectDir)imgui;$(projectDir)math;$(projectDir)scene;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -133,7 +133,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(projectDir)input;$(projectDir);$(projectDir)3D;$(projectDir)base;$(projectDir)imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(projectDir)input;$(projectDir);$(projectDir)3D;$(projectDir)base;$(projectDir)imgui;$(projectDir)math;$(projectDir)scene;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -147,20 +147,20 @@
     <ClCompile Include="base\DirectXCommon.cpp" />
     <ClCompile Include="base\FPS.cpp" />
     <ClCompile Include="base\Masage.cpp" />
+    <ClCompile Include="base\Sound.cpp" />
     <ClCompile Include="base\Texture.cpp" />
     <ClCompile Include="base\WinApp.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Cube.cpp" />
-    <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="input\DXInput.cpp" />
     <ClCompile Include="input\input.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Math2.cpp" />
-    <ClCompile Include="Matrix4.cpp" />
+    <ClCompile Include="math\Math2.cpp" />
+    <ClCompile Include="math\Matrix4.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="scene\GameScene.cpp" />
     <ClCompile Include="Smoke.cpp" />
-    <ClCompile Include="Sound.cpp" />
     <ClCompile Include="StarDust.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -168,20 +168,20 @@
     <ClInclude Include="base\DirectXCommon.h" />
     <ClInclude Include="base\FPS.h" />
     <ClInclude Include="base\Masage.h" />
+    <ClInclude Include="base\Sound.h" />
     <ClInclude Include="base\Texture.h" />
     <ClInclude Include="base\WinApp.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Cube.h" />
-    <ClInclude Include="GameScene.h" />
     <ClInclude Include="input\DXInput.h" />
     <ClInclude Include="input\input.h" />
     <ClInclude Include="main.h" />
-    <ClInclude Include="Math2.h" />
-    <ClInclude Include="Matrix4.h" />
+    <ClInclude Include="math\Math2.h" />
+    <ClInclude Include="math\Matrix4.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="scene\GameScene.h" />
     <ClInclude Include="Smoke.h" />
-    <ClInclude Include="Sound.h" />
     <ClInclude Include="StarDust.h" />
   </ItemGroup>
   <ItemGroup>

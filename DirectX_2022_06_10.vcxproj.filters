@@ -31,6 +31,18 @@
     <Filter Include="ヘッダー ファイル\base">
       <UniqueIdentifier>{a59de0ba-25bc-4cf6-bdd5-f9188df8dde6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\math">
+      <UniqueIdentifier>{fdace0ab-ff38-413c-b0db-406a52776997}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\math">
+      <UniqueIdentifier>{cc2cd65c-9aa7-477f-9245-493f7035ad87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\scene">
+      <UniqueIdentifier>{0968b2cd-2ffd-4210-825a-a553590d0af1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\scene">
+      <UniqueIdentifier>{96c0149d-5884-4980-be2c-a1c12590647a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -54,9 +66,6 @@
     <ClCompile Include="base\Texture.cpp">
       <Filter>ソース ファイル\base</Filter>
     </ClCompile>
-    <ClCompile Include="GameScene.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Cube.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -67,9 +76,6 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Smoke.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Sound.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
@@ -84,11 +90,17 @@
     <ClCompile Include="base\FPS.cpp">
       <Filter>ソース ファイル\base</Filter>
     </ClCompile>
-    <ClCompile Include="Math2.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="math\Math2.cpp">
+      <Filter>ソース ファイル\math</Filter>
     </ClCompile>
-    <ClCompile Include="Matrix4.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="math\Matrix4.cpp">
+      <Filter>ソース ファイル\math</Filter>
+    </ClCompile>
+    <ClCompile Include="scene\GameScene.cpp">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="base\Sound.cpp">
+      <Filter>ソース ファイル\base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -113,9 +125,6 @@
     <ClInclude Include="base\Texture.h">
       <Filter>ヘッダー ファイル\base</Filter>
     </ClInclude>
-    <ClInclude Include="GameScene.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Cube.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -126,9 +135,6 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Smoke.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Sound.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
@@ -143,11 +149,17 @@
     <ClInclude Include="base\FPS.h">
       <Filter>ヘッダー ファイル\base</Filter>
     </ClInclude>
-    <ClInclude Include="Math2.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="math\Math2.h">
+      <Filter>ヘッダー ファイル\math</Filter>
     </ClInclude>
-    <ClInclude Include="Matrix4.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="math\Matrix4.h">
+      <Filter>ヘッダー ファイル\math</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\GameScene.h">
+      <Filter>ヘッダー ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="base\Sound.h">
+      <Filter>ヘッダー ファイル\base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
