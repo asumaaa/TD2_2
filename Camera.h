@@ -15,7 +15,7 @@ public:
 	Camera();
 	~Camera();
 	//初期化
-	void Initialize(Input* input,Player* player);
+	void Initialize(Input* input, DXInput* dxInput,Player* player);
 	//更新
 	void Update();
 	//プレイヤーの後ろをつける挙動
@@ -33,6 +33,7 @@ private:
 	Player* player_;
 	//入力
 	Input* input_;
+	DXInput* dxInput_;
 	//射影変換
 	XMMATRIX matProjection_;
 	//ビュー変換行列
@@ -43,5 +44,8 @@ private:
 	//プレイヤーの後ろをつける挙動
 	//プレイヤーとカメラの距離
 	float length_ = 30.0f;
+	//入力によって加算させる変数
+	float lengthX_ = 0.0f;
+	float lengthZ_ = 0.0f;
 };
 

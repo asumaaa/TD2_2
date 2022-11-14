@@ -16,10 +16,11 @@ Camera::~Camera()
 {
 }
 
-void Camera::Initialize(Input* input, Player* player)
+void Camera::Initialize(Input* input, DXInput* dxInput,Player* player)
 {
 	//引数から受け取ったデータを代入
 	this->input_ = input;
+	this->dxInput_ = dxInput;
 	this->player_ = player;
 
 	//射影変換
@@ -43,18 +44,51 @@ void Camera::Update()
 
 void Camera::homind()
 {
+	//左右
+	float addX = dxInput_->GamePad.state.Gamepad.sThumbRX / (32767.0f) * (PI / 90);
+	float moveRange = PI / 3;
+	if (dxInput_->GamePad.state.Gamepad.sThumbRX > 15000 || dxInput_->GamePad.state.Gamepad.sThumbRX < -15000)
+	{
+		if (lengthX_ < moveRange && lengthX_ > -moveRange)
+		{
+			lengthX_ -= addX;
+			lengthZ_ -= addX;
+		}
+		if (lengthX_ > moveRange)
+		{
+			lengthX_ = moveRange - addX;
+			lengthZ_ = moveRange - addX;
+		}
+		if (lengthX_ < -moveRange)
+		{
+			lengthX_ = -moveRange - addX;
+			lengthZ_ = -moveRange - addX;
+		}
+	}
+	//ステックに触っていないときの処理
+	else if (lengthX_ != 0)
+	{
+		if (lengthX_ < -(PI / 90))
+		{
+			lengthX_ += (PI / 90);
+			lengthZ_ += (PI / 90);
+		}
+		else if (lengthX_ > (PI / 90))
+		{
+			lengthX_ -= (PI / 90);
+			lengthZ_ -= (PI / 90);
+		}
+	}
+
 	float x = 0;
 	float y = 0;
 	float z = 0;
 
 	//カメラをプレイヤーの真後ろに移動
-	x = player_->GetPosition().x + (sin(-player_->GetRotation().x + (PI / 2)) * cos(-player_->GetRotation().y - (PI / 2)) * length_);
-	y = player_->GetPosition().y + (cos(-player_->GetRotation().x + (PI * 19/40)) * length_);
-	z = player_->GetPosition().z + (sin(-player_->GetRotation().x + (PI / 2)) * sin(-player_->GetRotation().y - (PI / 2)) * length_);
+	x = player_->GetPosition().x + (/*sin(-player_->GetRotation().x + (PI / 2) + lengthX_) **/ cos(-player_->GetRotation().y - (PI / 2) + lengthX_) * length_);
+	y = player_->GetPosition().y + (cos(-player_->GetRotation().x + (PI * 19 / 40)) * length_);
+	z = player_->GetPosition().z + (/*sin(-player_->GetRotation().x + (PI / 2) + lengthZ_) **/ sin(-player_->GetRotation().y - (PI / 2) + lengthZ_) * length_);
 
-	/*x = player_->GetPosition().x + (cos(-player_->GetRotation().x + (PI * 19 / 40)) * length_);
-	y = player_->GetPosition().y + (sin(-player_->GetRotation().x + (PI / 2)) * sin(-player_->GetRotation().y - (PI / 2)) * length_);
-	z = player_->GetPosition().z + (sin(-player_->GetRotation().x + (PI / 2)) * cos(-player_->GetRotation().y - (PI / 2)) * length_);*/
 
 	//天井を調整
 	if (sin(-player_->GetRotation().x + (PI / 2)) <= 0)

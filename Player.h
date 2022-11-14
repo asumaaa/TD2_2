@@ -37,6 +37,6 @@ private:
 
 	//スピード
 	XMFLOAT3 velocity;
-	float speed = 0.6f;
+	float speed = 1.0f;
 };
 

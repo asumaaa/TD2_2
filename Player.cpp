@@ -27,9 +27,6 @@ void Player::Initialize(DirectXCommon* dx,Model* model, DXInput* dxInput)
 	Object3D* newObject = new Object3D();
 	newObject->Initialize(dx_, model_);
 	object3d_.reset(newObject);
-
-	/*rotation1_.x = PI / 2;
-	rotation2_.x = PI / 2;*/
 }
 
 void Player::Update(XMMATRIX& matView, XMMATRIX& matProjection)
@@ -108,8 +105,8 @@ void Player::Move()
 		}
 		if (rotation1_.x < -PI / 4)
 		{
-			rotation1_.x = -PI / 4 + x;
-			rotation2_.x = -PI / 4 + x;
+			rotation1_.x = -PI / 4 - x;
+			rotation2_.x = -PI / 4 - x;
 		}
 	}
 	//¶‰E

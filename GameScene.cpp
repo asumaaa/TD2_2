@@ -42,7 +42,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 
 	//ƒJƒƒ‰‰Šú‰»
 	Camera* newCamera = new Camera();
-	newCamera->Initialize(input_, player_.get());
+	newCamera->Initialize(input_,dxInput, player_.get());
 	camera_.reset(newCamera);
 }
 
