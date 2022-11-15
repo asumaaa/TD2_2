@@ -13,12 +13,13 @@ public:
 	StarDust* GetInstance();
 	StarDust();
 	~StarDust();
-	void Initialize(DirectXCommon* dx, Model* model);
+	void Initialize(ID3D12Device* device, Model* model);
 	void Update(XMMATRIX& matView, XMMATRIX& matProjection);
-	void Draw();
+	void Draw(ID3D12GraphicsCommandList* cmdList);
 	void Delete();
 private:
-	DirectXCommon* dx_;
+	/*DirectXCommon* dx_;*/
+	ID3D12Device* device_;
 	Model* model_;
 
 	//êØã˚ÇÃêî

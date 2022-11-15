@@ -16,16 +16,16 @@ Player::~Player()
 {
 }
 
-void Player::Initialize(DirectXCommon* dx,Model* model, DXInput* dxInput)
+void Player::Initialize(ID3D12Device* device,Model* model, DXInput* dxInput)
 {
 	//引数から受け取った値を代入
-	this->dx_ = dx;
+	this->device_ = device;
 	this->model_ = model;
 	this->dxInput_ = dxInput;
 
 	//オブジェクト初期化
 	Object3D* newObject = new Object3D();
-	newObject->Initialize(dx_, model_);
+	newObject->Initialize(device_, model_);
 	object3d_.reset(newObject);
 }
 
@@ -122,9 +122,9 @@ void Player::Move()
 	position_.z += velocity.z * speed;
 }
 
-void Player::Draw()
+void Player::Draw(ID3D12GraphicsCommandList* cmdList)
 {
-	object3d_->Draw(model_->vbView, model_->ibView);
+	object3d_->Draw(cmdList,model_->vbView, model_->ibView);
 }
 
 void Player::setPosition(XMFLOAT3 pos)

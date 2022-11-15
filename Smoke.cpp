@@ -15,10 +15,10 @@ Smoke::~Smoke()
 {
 }
 
-void Smoke::Initialize(DirectXCommon* dx, Model* model, XMFLOAT3 position)
+void Smoke::Initialize(ID3D12Device* device, Model* model, XMFLOAT3 position)
 {
 	//à¯êîÇ©ÇÁéÛÇØéÊÇ¡ÇΩïœêîÇë„ì¸
-	this->dx_ = dx;
+	this->device_ = device;
 	this->model_ = model;
 	//óvëfêîämíË
 	position_.resize(smokeNum_);
@@ -38,7 +38,7 @@ void Smoke::Initialize(DirectXCommon* dx, Model* model, XMFLOAT3 position)
 	for (int i = 0; i < smokeNum_; i++)
 	{
 		std::unique_ptr<Object3D> newObject = std::make_unique<Object3D>();
-		newObject->Initialize(dx_, model_);
+		newObject->Initialize(device_, model_);
 		object3Ds_.push_back(std::move(newObject));
 	}
 
@@ -96,10 +96,10 @@ void Smoke::Update(XMMATRIX& matView, XMMATRIX& matProjection, XMFLOAT3 position
 	}
 }
 
-void Smoke::Draw()
+void Smoke::Draw(ID3D12GraphicsCommandList* cmdList)
 {
 	for (std::unique_ptr<Object3D>& object : object3Ds_)
 	{
-		object->Draw(model_->vbView, model_->ibView);
+		object->Draw(cmdList,model_->vbView, model_->ibView);
 	}
 }

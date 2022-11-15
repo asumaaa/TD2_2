@@ -22,6 +22,8 @@ class DirectXCommon
 public:
 	//シングルトンインスタンスを取得
 	static DirectXCommon* GetInstance();
+	DirectXCommon() = default;
+	~DirectXCommon();
 	//初期化処理
 	void Initialize(WinApp* winApp);
 	void InitializeDevice();			//デバイス関連
@@ -77,8 +79,8 @@ private:
 public:
 	D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc{};
 	std::vector<ComPtr<ID3D12Resource>>backBuffers;
-	std::vector<ComPtr<IDXGIAdapter4>>adapters;
-	ComPtr<IDXGIAdapter4> tmpAdapter;
+	/*std::vector<ComPtr<IDXGIAdapter4>>adapters;
+	ComPtr<IDXGIAdapter4> tmpAdapter;*/
 
 	UINT64 fenceVal = 0;
 };

@@ -1,7 +1,6 @@
 #include "DirectXCommon.h"
 #include "input.h"
 #include "DirectXTex.h"
-#include "Cube.h"
 #include "object3D.h"
 #include "list"
 #include "memory"

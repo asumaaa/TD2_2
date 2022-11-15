@@ -21,27 +21,27 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 
 	//プレイヤーのモデル初期化
 	Model* newModel = new Model();
-	newModel->Initialize(dxCommon_, "fighter", "Resources/fighter.png");
+	newModel->Initialize(dxCommon_->GetDevice(), "fighter", "Resources/fighter.png");
 	playerModel_.reset(newModel);
 
 	//プレイヤー初期化
 	Player* newPlayer = new Player();
-	newPlayer->Initialize(dxCommon, playerModel_.get(),dxInput);
+	newPlayer->Initialize(dxCommon_->GetDevice(), playerModel_.get(),dxInput);
 	player_.reset(newPlayer);
 
 	//星屑のモデルの初期化
 	Model* newStarModel = new Model();
-	newStarModel->Initialize(dxCommon_, "star", "Resources/star.png");
+	newStarModel->Initialize(dxCommon_->GetDevice(), "star", "Resources/star.png");
 	starDustModel_.reset(newStarModel);
 
 	//プレイヤーの煙初期化
 	Smoke* newSmoke = new Smoke();
-	newSmoke->Initialize(dxCommon_, starDustModel_.get(), player_->GetPosition());
+	newSmoke->Initialize(dxCommon_->GetDevice(), starDustModel_.get(), player_->GetPosition());
 	smoke_.reset(newSmoke);
 
 	//星屑初期化
 	StarDust* newStarDust = new StarDust();
-	newStarDust->Initialize(dxCommon_, starDustModel_.get());
+	newStarDust->Initialize(dxCommon_->GetDevice(), starDustModel_.get());
 	starDust_.reset(newStarDust);
 
 	//カメラ初期化
@@ -75,9 +75,9 @@ void GameScene::Update()
 
 void GameScene::Draw()
 {
-	starDust_->Draw();
-	player_->Draw();
-	smoke_->Draw();
+	starDust_->Draw(dxCommon_->GetCommandList());
+	player_->Draw(dxCommon_->GetCommandList());
+	smoke_->Draw(dxCommon_->GetCommandList());
 }
 
 void GameScene::Delete()

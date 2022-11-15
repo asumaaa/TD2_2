@@ -10,11 +10,12 @@ public:
 	Smoke* GetInstance();
 	Smoke();
 	~Smoke();
-	void Initialize(DirectXCommon* dx, Model* model,XMFLOAT3 position);
+	void Initialize(ID3D12Device* device, Model* model,XMFLOAT3 position);
 	void Update(XMMATRIX& matView, XMMATRIX& matProjection, XMFLOAT3 position, XMFLOAT3 rotation);
-	void Draw();
+	void Draw(ID3D12GraphicsCommandList* cmdList);
 private:
-	DirectXCommon* dx_;
+	/*DirectXCommon* dx_;*/
+	ID3D12Device* device_;
 	Model* model_;
 
 	//煙オブジェの数

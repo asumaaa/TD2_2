@@ -38,8 +38,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		//ゲームループ
 	while (true)
 	{
-		//メッセージがある？
-		masage->Update();
+		//Xボタンで終了メッセ時が来たらゲームループを抜ける 
+		if (masage->Update() == 1)break;
 
 #pragma region DirectX毎フレーム処理
 
@@ -56,20 +56,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		dx->PostDraw();
 
 #pragma endregion
-
-		//Xボタンで終了メッセ時が来たらゲームループを抜ける 
-		if (masage->ExitGameloop() == 1)
-		{
-			/*gameScene->Delete();*/
-			break;
-		}
 	}
 	
 	//FPS固定を解除
 	fps->FpsControlEnd();
-	delete fps;
-
 	dx->EndImgui();
+
+	delete fps;
+	delete gameScene;
+
+	masage->ExitGameloop();
 
 	//ウィンドウクラスを登録解除
 	win->deleteWindow();

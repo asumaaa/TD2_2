@@ -11,10 +11,10 @@ public:
 	Player* GetInstance();
 	Player();
 	~Player();
-	void Initialize(DirectXCommon* dx,Model* model, DXInput* dxInput);
+	void Initialize(ID3D12Device* device,Model* model, DXInput* dxInput);
 	void Update(XMMATRIX& matView, XMMATRIX& matProjection);
 	void Move();
-	void Draw();
+	void Draw(ID3D12GraphicsCommandList* cmdList);
 	//ゲッター　セッター　
 	XMFLOAT3 GetPosition() { return position_; };
 	XMFLOAT3 GetRotation() { return rotation1_; };
@@ -23,7 +23,8 @@ public:
 	void setRotation(XMFLOAT3 rot);
 	void setScale(XMFLOAT3 sca);
 private:
-	DirectXCommon* dx_ = nullptr;
+	/*DirectXCommon* dx_ = nullptr;*/
+	ID3D12Device* device_;
 	Model* model_ = nullptr;
 	std::unique_ptr<Object3D> object3d_;
 	DXInput* dxInput_;

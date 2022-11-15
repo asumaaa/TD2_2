@@ -1,8 +1,8 @@
 #include "object3D.h"
 
-void Object3D::Initialize(DirectXCommon* dx, Model* model)
+void Object3D::Initialize(ID3D12Device* device, Model* model)
 {
-	this->dx = dx;
+	this->device = device;
 	this->model = model;
 
 	// ヒーププロパティ
@@ -14,7 +14,7 @@ void Object3D::Initialize(DirectXCommon* dx, Model* model)
 	HRESULT result;
 
 	// 定数バッファの生成
-	result = this->dx->GetDevice()->CreateCommittedResource(
+	result = this->device->CreateCommittedResource(
 		&heapProps, // アップロード可能
 		D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
 		IID_PPV_ARGS(&constBuffB0));
@@ -25,7 +25,7 @@ void Object3D::Initialize(DirectXCommon* dx, Model* model)
 		CD3DX12_RESOURCE_DESC::Buffer((sizeof(ConstBufferDataB1) + 0xff) & ~0xff);
 
 	// 定数バッファの生成
-	result = this->dx->GetDevice()->CreateCommittedResource(
+	result = this->device->CreateCommittedResource(
 		&heapProps, // アップロード可能
 		D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
 		IID_PPV_ARGS(&constBuffB1));
@@ -76,9 +76,9 @@ void Object3D::Update(XMMATRIX& matView, XMMATRIX& matProjection)
 	constBuffB1->Unmap(0, nullptr);
 }
 
-void Object3D::Draw(D3D12_VERTEX_BUFFER_VIEW& vbView,D3D12_INDEX_BUFFER_VIEW& ibView)
+void Object3D::Draw(ID3D12GraphicsCommandList* cmdList,D3D12_VERTEX_BUFFER_VIEW& vbView,D3D12_INDEX_BUFFER_VIEW& ibView)
 {
-	this->cmdList = dx->GetCommandList();
+	this->cmdList = cmdList;
 	// パイプラインステートの設定
 	cmdList->SetPipelineState(model->GetPipelinestate());
 	// ルートシグネチャの設定

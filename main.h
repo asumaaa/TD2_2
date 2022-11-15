@@ -22,11 +22,3 @@ using namespace Microsoft::WRL;
 
 //DirectX‰Šú‰»—p‚Ì•Ï”
 HRESULT result;
-
-//ƒJƒƒ‰‚Ì‰ñ“]Šp
-float angle = 0.0f;
-
-//À•W
-XMFLOAT3 position = { 0.0f,0.0f,-40.0f };
-
-float x = 0;

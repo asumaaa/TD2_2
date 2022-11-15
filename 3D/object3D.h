@@ -21,9 +21,9 @@ public:
 	Object3D* GetInstance();
 	Object3D();
 	~Object3D();
-	void Initialize(DirectXCommon* dx,Model* model);
+	void Initialize(ID3D12Device* device,Model* model);
 	void Update(XMMATRIX& matView, XMMATRIX& matProjection);
-	void Draw(D3D12_VERTEX_BUFFER_VIEW& vbView,D3D12_INDEX_BUFFER_VIEW& ibView);
+	void Draw(ID3D12GraphicsCommandList* cmdList,D3D12_VERTEX_BUFFER_VIEW& vbView,D3D12_INDEX_BUFFER_VIEW& ibView);
 	void Delete();
 	//ゲッター　セッター　
 	XMFLOAT3 GetPosition() { return position; };
@@ -59,7 +59,8 @@ private:
 	//モデル
 	Model* model = nullptr;
 	//デバイス
-	DirectXCommon* dx = nullptr;
+	/*DirectXCommon* dx = nullptr;*/
+	ID3D12Device* device;
 	//定数バッファ
 	ComPtr<ID3D12Resource> constBuffB0; 
 	ComPtr<ID3D12Resource> constBuffB1;

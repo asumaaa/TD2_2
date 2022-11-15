@@ -6,7 +6,7 @@ class Masage
 {
 public:
 	static Masage* GetInstance();
-	void Update();
+	bool Update();
 	//Xボタンで終了メッセ時が来たらゲームループを抜ける 
 	bool ExitGameloop();
 public:

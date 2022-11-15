@@ -15,9 +15,9 @@ StarDust::~StarDust()
 {
 }
 
-void StarDust::Initialize(DirectXCommon* dx, Model* model)
+void StarDust::Initialize(ID3D12Device* device, Model* model)
 {
-	this->dx_ = dx;
+	this->device_ = device;
 	this->model_ = model;
 
 
@@ -38,7 +38,7 @@ void StarDust::Initialize(DirectXCommon* dx, Model* model)
 	for (int i = 0; i < starDustNum; i++)
 	{
 		std::unique_ptr<Object3D> newObject = std::make_unique<Object3D>();
-		newObject->Initialize(dx_, model_);
+		newObject->Initialize(device_, model_);
 		object3Ds_.push_back(std::move(newObject));
 	}
 
@@ -60,11 +60,11 @@ void StarDust::Update(XMMATRIX& matView, XMMATRIX& matProjection)
 	}
 }
 
-void StarDust::Draw()
+void StarDust::Draw(ID3D12GraphicsCommandList* cmdList)
 {
 	for (std::unique_ptr<Object3D>& object : object3Ds_)
 	{
-		object->Draw(model_->vbView, model_->ibView);
+		object->Draw(cmdList,model_->vbView, model_->ibView);
 	}
 }
 

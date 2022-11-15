@@ -10,6 +10,11 @@ DirectXCommon* DirectXCommon::GetInstance()
 	return &instance;
 }
 
+DirectXCommon::~DirectXCommon()
+{
+	/*delete commandList.Get();*/
+}
+
 //初期化処理
 void DirectXCommon::Initialize(WinApp* winApp)
 {
@@ -63,6 +68,8 @@ void DirectXCommon::InitializeDevice()
 	
 		//アダプター
 		//パフォーマンスが高いものから順に、すべてのアダプターを列挙する
+		std::vector<ComPtr<IDXGIAdapter4>>adapters;
+		ComPtr<IDXGIAdapter4> tmpAdapter;
 		for (UINT i = 0;
 			dxgiFactory->EnumAdapterByGpuPreference(
 				i,
