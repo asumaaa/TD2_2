@@ -43,6 +43,7 @@ void Player::Update(XMMATRIX& matView, XMMATRIX& matProjection)
 
 bool Player::Attack()
 {
+	//Rƒ{ƒ^ƒ“‚ð‰Ÿ‚µ‘±‚¯‚é‚±‚Æ‚Å’e‚ð˜AŽË
 	if (dxInput_->GamePad.state.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER)
 	{
 		bulletTimer_++;

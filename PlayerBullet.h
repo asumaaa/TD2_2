@@ -30,7 +30,7 @@ private:
 	float speed = 3.0f;
 
 	//寿命
-	static const int32_t lifeTime = 60;
+	static const int32_t lifeTime = 60 * 5;
 	//デスタイマー
 	int32_t deathTimer_ = lifeTime;
 	//デスフラグ

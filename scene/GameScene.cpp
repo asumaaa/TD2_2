@@ -80,6 +80,7 @@ void GameScene::Update()
 	//プレイヤーの煙更新
 	smoke_->Update(matView, matProjection,player_->GetPosition(), player_->GetRotation());
 	
+
 	//プレイヤーから受け取ったフラグで弾生成
 	if (player_->Attack() == 1)
 	{
@@ -96,6 +97,24 @@ void GameScene::Update()
 	playerBullet_.remove_if([](std::unique_ptr<PlayerBullet>& bullet)
 		{return bullet->IsDead(); }
 	);
+
+
+	//フラグが立ったら爆発エフェクト発生
+	if (input_->TriggerKey(DIK_SPACE))
+	{
+		std::unique_ptr<BreakEffect> newEffect = std::make_unique<BreakEffect>();
+		newEffect->Initialize(dxCommon_->GetDevice(), starDustModel_.get(), player_->GetPosition());
+		breakEffect_.push_back(std::move(newEffect));
+	}
+	//プレイヤーの弾更新
+	for (std::unique_ptr<BreakEffect>& effect : breakEffect_)
+	{
+		effect->Update(matView, matProjection);
+	}
+	//デスフラグの立った弾を削除
+	breakEffect_.remove_if([](std::unique_ptr<BreakEffect>& effect)
+		{return effect->IsDead(); }
+	);
 }
 
 void GameScene::Draw()
@@ -107,6 +126,11 @@ void GameScene::Draw()
 	for (std::unique_ptr<PlayerBullet>& bullet : playerBullet_)
 	{
 		bullet->Draw(dxCommon_->GetCommandList());
+	}
+	//爆発エフェクト描画
+	for (std::unique_ptr<BreakEffect>& effect : breakEffect_)
+	{
+		effect->Draw(dxCommon_->GetCommandList());
 	}
 }
 

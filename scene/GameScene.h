@@ -14,6 +14,7 @@
 #include "Smoke.h"
 #include "DXInput.h"
 #include "PlayerBullet.h"
+#include "BreakEffect.h"
 
 class GameScene
 {
@@ -61,4 +62,7 @@ private:
 
 	//弾
 	std::list<std::unique_ptr<PlayerBullet>> playerBullet_;
+
+	//爆発エフェクト
+	std::list<std::unique_ptr<BreakEffect>> breakEffect_;
 };
