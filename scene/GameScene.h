@@ -13,6 +13,7 @@
 #include "StarDust.h"
 #include "Smoke.h"
 #include "DXInput.h"
+#include "PlayerBullet.h"
 
 class GameScene
 {
@@ -54,4 +55,10 @@ private:
 
 	//ƒJƒƒ‰
 	std::unique_ptr<Camera> camera_;
+
+	//’e‚Ìƒ‚ƒfƒ‹
+	std::unique_ptr<Model> bulletModel_;
+
+	//’e
+	std::list<std::unique_ptr<PlayerBullet>> playerBullet_;
 };

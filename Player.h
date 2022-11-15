@@ -13,12 +13,14 @@ public:
 	~Player();
 	void Initialize(ID3D12Device* device,Model* model, DXInput* dxInput);
 	void Update(XMMATRIX& matView, XMMATRIX& matProjection);
+	bool Attack();
 	void Move();
 	void Draw(ID3D12GraphicsCommandList* cmdList);
 	//ゲッター　セッター　
 	XMFLOAT3 GetPosition() { return position_; };
 	XMFLOAT3 GetRotation() { return rotation1_; };
 	XMFLOAT3 GetScale() { return scale_; };
+	XMFLOAT3 GetVelocity() { return velocity; };
 	void setPosition(XMFLOAT3 pos);
 	void setRotation(XMFLOAT3 rot);
 	void setScale(XMFLOAT3 sca);
@@ -33,11 +35,12 @@ private:
 	XMFLOAT3 rotation1_ = { 0,0,0 };	//プレイヤー本来の角度
 	XMFLOAT3 rotation2_ = { 0,0,0 };	//オブジェクトに渡す角度
 	XMFLOAT3 position_ = { 0,0,0 };
-	//ワールド変換行列
-	XMMATRIX matWorld;
 
 	//スピード
 	XMFLOAT3 velocity;
 	float speed = 1.0f;
+
+	//弾のタイマー
+	int bulletTimer_ = 4;
 };
 

@@ -41,9 +41,22 @@ void Player::Update(XMMATRIX& matView, XMMATRIX& matProjection)
 	object3d_->Update(matView, matProjection);
 }
 
+bool Player::Attack()
+{
+	if (dxInput_->GamePad.state.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER)
+	{
+		bulletTimer_++;
+		if (bulletTimer_ % 10 == 0)
+		{
+			return 1;
+		}
+	}
+	return 0;
+}
+
 void Player::Move()
 {
-	XMFLOAT3 velocity(0, 0, speed);
+	velocity = { 0, 0, speed };
 
 	//左ステックの変数
 	float x = dxInput_->GamePad.state.Gamepad.sThumbLY / (32767.0f) * (PI / 90.0f);

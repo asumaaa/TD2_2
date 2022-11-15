@@ -165,6 +165,7 @@
     <ClCompile Include="math\Matrix4.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerBullet.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
     <ClCompile Include="Smoke.cpp" />
     <ClCompile Include="StarDust.cpp" />
@@ -193,6 +194,7 @@
     <ClInclude Include="math\Matrix4.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerBullet.h" />
     <ClInclude Include="scene\GameScene.h" />
     <ClInclude Include="Smoke.h" />
     <ClInclude Include="StarDust.h" />

@@ -86,7 +86,7 @@ void Camera::homind()
 
 	//カメラをプレイヤーの真後ろに移動
 	x = player_->GetPosition().x + (/*sin(-player_->GetRotation().x + (PI / 2) + lengthX_) **/ cos(-player_->GetRotation().y - (PI / 2) + lengthX_) * length_);
-	y = player_->GetPosition().y + (cos(-player_->GetRotation().x + (PI * 19 / 40)) * length_);
+	y = player_->GetPosition().y + (cos(-player_->GetRotation().x + (PI * 18 / 40)) * length_);
 	z = player_->GetPosition().z + (/*sin(-player_->GetRotation().x + (PI / 2) + lengthZ_) **/ sin(-player_->GetRotation().y - (PI / 2) + lengthZ_) * length_);
 
 
