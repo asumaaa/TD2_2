@@ -1,7 +1,4 @@
 #include "GameScene.h"
-#include "imgui.h"
-#include <imgui_impl_win32.h>
-#include <imgui_impl_dx12.h>
 
 GameScene::GameScene()
 {
@@ -85,10 +82,10 @@ void GameScene::Draw()
 
 void GameScene::Delete()
 {
-	starDust_->Delete();
-	delete starDust_.get();
+	/*starDust_->Delete();*/
+	/*delete starDust_.get();
 	delete starDustModel_.get();
 	delete playerModel_.get();
 	delete player_.get();
-	delete camera_.get();
+	delete camera_.get();*/
 }

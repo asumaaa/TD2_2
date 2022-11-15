@@ -33,7 +33,10 @@ public:
 	//描画
 	void PreDraw();		//描画前
 	void PostDraw();	//描画後 
-	void Finalize();
+	//imgui用のヒープ生成
+	ComPtr<ID3D12DescriptorHeap>CreateDescriptorForImgui();
+	void InitializeImgui();
+	void EndImgui();
 	//ゲッター
 	ID3D12Device* GetDevice() { return device.Get(); }
 	IDXGISwapChain4* GetSwapChain() { return swapChain.Get(); }
@@ -44,6 +47,7 @@ public:
 	ID3D12CommandQueue* GetCommandQueue() { return commandQueue.Get(); }
 	ID3D12DescriptorHeap* GetRtvHeap() { return rtvHeap.Get(); }
 	ID3D12Fence* GetFence() { return fence.Get(); }
+	ComPtr<ID3D12DescriptorHeap>GetHeapForImgui() { return _heapForImgui; };
 public:
 	//メンバ変数
 	//ウィンドウ
@@ -68,7 +72,8 @@ private:
 	D3D12_HEAP_PROPERTIES depthHeapProp{};
 	D3D12_CLEAR_VALUE depthClearValue{};
 	D3D12_RESOURCE_BARRIER barrierDesc{};
-
+	//imgui用ヒープ
+	ComPtr<ID3D12DescriptorHeap> _heapForImgui;
 public:
 	D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc{};
 	std::vector<ComPtr<ID3D12Resource>>backBuffers;

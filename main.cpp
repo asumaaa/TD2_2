@@ -69,6 +69,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	fps->FpsControlEnd();
 	delete fps;
 
+	dx->EndImgui();
+
 	//ウィンドウクラスを登録解除
 	win->deleteWindow();
 

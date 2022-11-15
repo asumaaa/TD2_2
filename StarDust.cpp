@@ -70,6 +70,10 @@ void StarDust::Draw()
 
 void StarDust::Delete()
 {
+	/*for (std::unique_ptr<Object3D>& object : object3Ds_)
+	{
+		object->Delete();
+	}*/
 	/*auto itr = object3Ds_.begin();*/
 	/*object3Ds_.clear();
 	while (itr != object3Ds_.end())

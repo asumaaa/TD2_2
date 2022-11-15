@@ -103,6 +103,12 @@ void Object3D::Draw(D3D12_VERTEX_BUFFER_VIEW& vbView,D3D12_INDEX_BUFFER_VIEW& ib
 	cmdList->DrawIndexedInstanced(model->GetIndicesSize(), 1, 0, 0, 0);
 }
 
+void Object3D::Delete()
+{
+	/*constBuffB0->Release();
+	constBuffB1->Release();*/
+}
+
 void Object3D::setPosition(XMFLOAT3 pos)
 {
 	position = pos;
@@ -130,4 +136,5 @@ Object3D::Object3D()
 
 Object3D::~Object3D()
 {
+	/*delete model;*/
 }

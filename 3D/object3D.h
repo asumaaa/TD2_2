@@ -24,6 +24,7 @@ public:
 	void Initialize(DirectXCommon* dx,Model* model);
 	void Update(XMMATRIX& matView, XMMATRIX& matProjection);
 	void Draw(D3D12_VERTEX_BUFFER_VIEW& vbView,D3D12_INDEX_BUFFER_VIEW& ibView);
+	void Delete();
 	//ゲッター　セッター　
 	XMFLOAT3 GetPosition() { return position; };
 	XMFLOAT3 GetRotation() { return rotation; };
@@ -48,13 +49,13 @@ public:
 		float alpha;		//アルファ
 	};
 	//定数バッファ用データ構造体（3D変換行列）
-	struct ConstBufferDataTransform
+	/*struct ConstBufferDataTransform
 	{
 		XMMATRIX mat;
-	};
+	};*/
 private:
 	//定数バッファマップ
-	ConstBufferDataTransform* constMapTransform;
+	/*ConstBufferDataTransform* constMapTransform;*/
 	//モデル
 	Model* model = nullptr;
 	//デバイス

@@ -1,4 +1,7 @@
 #include "DirectXCommon.h"
+#include "imgui.h"
+#include <imgui_impl_win32.h>
+#include <imgui_impl_dx12.h>
 
 //シングルトンインスタンスを取得
 DirectXCommon* DirectXCommon::GetInstance()
@@ -25,6 +28,19 @@ void DirectXCommon::Initialize(WinApp* winApp)
 	InitializeDepthBuffer();
 	//フェンス生成
 	InitializeFence();
+
+	//imgui初期化
+	InitializeImgui();
+	/*if (ImGui::CreateContext() == nullptr)
+	{
+		assert(0);
+	}
+	[ImGui::] ;
+	_heapForImgui = CreateDescriptorForImgui();*/
+	/*if (_heapForImgui == nullptr)
+	{
+		return false;
+	}*/
 }
 
 #pragma region デバイス初期化
@@ -244,6 +260,11 @@ void DirectXCommon::InitializeFence()
 #pragma region 描画前処理
 void DirectXCommon::PreDraw()
 {
+	// imgui開始
+	ImGui_ImplDX12_NewFrame();
+	ImGui_ImplWin32_NewFrame();
+	ImGui::NewFrame();
+
 	//バックバッファの番号を取得(2つなので0番か1番)
 	UINT bbIndex = GetSwapChain()->GetCurrentBackBufferIndex();
 
@@ -289,6 +310,12 @@ void DirectXCommon::PostDraw()
 {
 	HRESULT result;
 
+	// imgui描画
+	ImGui::Render();
+	ID3D12DescriptorHeap* ppHeaps[] = { _heapForImgui.Get() };
+	commandList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
+	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), commandList.Get());
+
 	// 5. リソースバリアを書き込み禁止に
 	barrierDesc.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;	//描画状態から
 	barrierDesc.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;			//表示状態へ
@@ -328,3 +355,55 @@ void DirectXCommon::PostDraw()
 	assert(SUCCEEDED(result));
 }
 #pragma endregion
+ComPtr<ID3D12DescriptorHeap> DirectXCommon::CreateDescriptorForImgui()
+{
+	ComPtr<ID3D12DescriptorHeap>ret;
+
+	D3D12_DESCRIPTOR_HEAP_DESC desc = {};
+	desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+	desc.NodeMask = 0;
+	desc.NumDescriptors = 1;
+	desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+
+	device->CreateDescriptorHeap(&desc, IID_PPV_ARGS(ret.ReleaseAndGetAddressOf()));
+
+	return ret;
+}
+
+void DirectXCommon::InitializeImgui()
+{
+	HRESULT result;
+
+	// デスクリプタヒープを生成
+	D3D12_DESCRIPTOR_HEAP_DESC heapDesc{};
+	heapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+	heapDesc.NumDescriptors = 1;
+	heapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+	result = device->CreateDescriptorHeap(&heapDesc, IID_PPV_ARGS(&_heapForImgui));
+	assert(SUCCEEDED(result));
+
+	// スワップチェーンの情報を取得
+	DXGI_SWAP_CHAIN_DESC swcDesc = {};
+	result = swapChain->GetDesc(&swcDesc);
+	assert(SUCCEEDED(result));
+
+	if (ImGui::CreateContext() == nullptr) {
+		assert(0);
+	}
+	if (!ImGui_ImplWin32_Init(winApp_->GetHwnd())) {
+		assert(0);
+	}
+	if (!ImGui_ImplDX12_Init(
+		GetDevice(), swcDesc.BufferCount, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, _heapForImgui.Get(),
+		_heapForImgui->GetCPUDescriptorHandleForHeapStart(),
+		_heapForImgui->GetGPUDescriptorHandleForHeapStart())) {
+		assert(0);
+	}
+}
+
+void DirectXCommon::EndImgui()
+{
+	ImGui_ImplDX12_Shutdown();
+	ImGui_ImplWin32_Shutdown();
+	ImGui::DestroyContext();
+}

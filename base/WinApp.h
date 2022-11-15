@@ -17,6 +17,8 @@ public:
 	void CreateWindow_(const wchar_t* title);
 	//ウィンドウクラスを登録解除
 	void deleteWindow();
+	//ゲッター
+	HWND GetHwnd() { return hwnd; };
 public:
 	//メンバ変数
 	WNDCLASSEX w{};
