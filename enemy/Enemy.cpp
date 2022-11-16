@@ -39,6 +39,11 @@ void Enemy::Update(XMMATRIX& matView, XMMATRIX& matProjection)
 
 bool Enemy::Attack()
 {
+	bulletTimer_++;
+	if (bulletTimer_ % 10 == 0)
+	{
+		return true;
+	}
     return false;
 }
 

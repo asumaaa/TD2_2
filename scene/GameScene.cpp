@@ -34,6 +34,12 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 	newBulletModel->Initialize(dxCommon_->GetDevice(), "bullet", "Resources/bullet.png");
 	bulletModel_.reset(newBulletModel);
 
+
+	//敵の弾のモデルの初期化
+	Model* newEnemyBulletModel = new Model();
+	newEnemyBulletModel->Initialize(dxCommon_->GetDevice(), "bullet", "Resources/enemyBullet.png");
+	enemyBulletModel_.reset(newEnemyBulletModel);
+
 	//星屑のモデルの初期化
 	Model* newStarModel = new Model();
 	newStarModel->Initialize(dxCommon_->GetDevice(), "star", "Resources/star.png");
@@ -84,14 +90,15 @@ void GameScene::Update()
 	//当たり判定更新
 	EnmeyCollition();
 
-	//星屑更新
-	starDust_->Update(matView, matProjection);
 
 	//プレイヤー更新
 	player_->Update(matView, matProjection);
 
 	//プレイヤーの煙更新
 	smoke_->Update(matView, matProjection,player_->GetPosition(), player_->GetRotation());
+
+	//星屑更新
+	starDust_->Update(matView, matProjection);
 
 	//敵更新
 	enemy_->Update(matView, matProjection);
@@ -114,12 +121,29 @@ void GameScene::Update()
 		{return bullet->IsDead(); }
 	);
 
-	//プレイヤーの弾更新
+	//敵から受け取ったフラグで弾生成
+	if (enemy_->Attack() == 1)
+	{
+		std::unique_ptr<EnemyBullet> newBullet = std::make_unique<EnemyBullet>();
+		newBullet->Initialize(dxCommon_->GetDevice(), enemyBulletModel_.get(), enemy_->GetPosition(), player_->GetVelocity());
+		enemyBullet_.push_back(std::move(newBullet));
+	}
+	//敵の弾更新
+	for (std::unique_ptr<EnemyBullet>& bullet : enemyBullet_)
+	{
+		bullet->Update(matView, matProjection);
+	}
+	//デスフラグの立った弾を削除
+	enemyBullet_.remove_if([](std::unique_ptr<EnemyBullet>& bullet)
+		{return bullet->IsDead(); }
+	);
+
+	//エフェクト更新
 	for (std::unique_ptr<BreakEffect>& effect : breakEffect_)
 	{
 		effect->Update(matView, matProjection);
 	}
-	//デスフラグの立った弾を削除
+	//デスフラグの立ったエフェクトを削除
 	breakEffect_.remove_if([](std::unique_ptr<BreakEffect>& effect)
 		{return effect->IsDead(); }
 	);
@@ -133,6 +157,10 @@ void GameScene::Draw()
 	enemy_->Draw(dxCommon_->GetCommandList());
 	//プレイヤーの弾更新
 	for (std::unique_ptr<PlayerBullet>& bullet : playerBullet_)
+	{
+		bullet->Draw(dxCommon_->GetCommandList());
+	}
+	for (std::unique_ptr<EnemyBullet>& bullet : enemyBullet_)
 	{
 		bullet->Draw(dxCommon_->GetCommandList());
 	}

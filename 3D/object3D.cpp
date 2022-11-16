@@ -40,15 +40,15 @@ void Object3D::Update(XMMATRIX& matView, XMMATRIX& matProjection)
 	// スケール、回転、平行移動行列の計算
 	matScale = XMMatrixScaling(scale.x, scale.y, scale.z);
 	matRot = XMMatrixIdentity();
-	matRot *= XMMatrixRotationY(rotation.y);
+	/*matRot *= XMMatrixRotationY(rotation.y);
+	matRot *= XMMatrixRotationZ(rotation.z);
+	matRot *= XMMatrixRotationX(rotation.x);*/
 	matRot *= XMMatrixRotationZ(rotation.z);
 	matRot *= XMMatrixRotationX(rotation.x);
-	/*matRot *= XMMatrixRotationZ(rotation.z);
-	matRot *= XMMatrixRotationX(rotation.x);
-	matRot *= XMMatrixRotationY(rotation.y);*/
+	matRot *= XMMatrixRotationY(rotation.y);
 	matTrans = XMMatrixTranslation(position.x, position.y, position.z);
 
-	// ワールド行列の合成
+	//ワールド行列の合成
 	matWorld = XMMatrixIdentity(); // 変形をリセット
 	matWorld *= matScale; // ワールド行列にスケーリングを反映
 	matWorld *= matRot; // ワールド行列に回転を反映
@@ -105,8 +105,6 @@ void Object3D::Draw(ID3D12GraphicsCommandList* cmdList,D3D12_VERTEX_BUFFER_VIEW&
 
 void Object3D::Delete()
 {
-	/*constBuffB0->Release();
-	constBuffB1->Release();*/
 }
 
 void Object3D::setPosition(XMFLOAT3 pos)

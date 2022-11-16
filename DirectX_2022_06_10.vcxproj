@@ -118,7 +118,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(projectDir)input;$(projectDir);$(projectDir)3D;$(projectDir)base;$(projectDir)imgui;$(projectDir)math;$(projectDir)scene;$(projectDir)player;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(projectDir)input;$(projectDir);$(projectDir)3D;$(projectDir)base;$(projectDir)imgui;$(projectDir)math;$(projectDir)scene;$(projectDir)player;$(projectDir)enemy;$(projectDir)effect;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -133,7 +133,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(projectDir)input;$(projectDir);$(projectDir)3D;$(projectDir)base;$(projectDir)imgui;$(projectDir)math;$(projectDir)scene;$(projectDir)player;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(projectDir)input;$(projectDir);$(projectDir)3D;$(projectDir)base;$(projectDir)imgui;$(projectDir)math;$(projectDir)scene;$(projectDir)player;$(projectDir)enemy;$(projectDir)effect;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -151,9 +151,11 @@
     <ClCompile Include="base\Sprite.cpp" />
     <ClCompile Include="base\Texture.cpp" />
     <ClCompile Include="base\WinApp.cpp" />
-    <ClCompile Include="BreakEffect.cpp" />
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="effect\BreakEffect.cpp" />
+    <ClCompile Include="effect\Smoke.cpp" />
+    <ClCompile Include="enemy\Enemy.cpp" />
+    <ClCompile Include="enemy\EnemyBullet.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
     <ClCompile Include="imgui\imgui_draw.cpp" />
@@ -170,7 +172,6 @@
     <ClCompile Include="player\Player.cpp" />
     <ClCompile Include="player\PlayerBullet.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
-    <ClCompile Include="Smoke.cpp" />
     <ClCompile Include="StarDust.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -182,9 +183,11 @@
     <ClInclude Include="base\Sprite.h" />
     <ClInclude Include="base\Texture.h" />
     <ClInclude Include="base\WinApp.h" />
-    <ClInclude Include="BreakEffect.h" />
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="effect\BreakEffect.h" />
+    <ClInclude Include="effect\Smoke.h" />
+    <ClInclude Include="enemy\Enemy.h" />
+    <ClInclude Include="enemy\EnemyBullet.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
     <ClInclude Include="imgui\imgui_impl_dx12.h" />
@@ -202,7 +205,6 @@
     <ClInclude Include="player\Player.h" />
     <ClInclude Include="player\PlayerBullet.h" />
     <ClInclude Include="scene\GameScene.h" />
-    <ClInclude Include="Smoke.h" />
     <ClInclude Include="StarDust.h" />
   </ItemGroup>
   <ItemGroup>

@@ -17,6 +17,7 @@
 #include "BreakEffect.h"
 #include "Sprite.h"
 #include "Enemy.h"
+#include "EnemyBullet.h"
 
 class GameScene
 {
@@ -73,4 +74,10 @@ private:
 
 	//“G
 	std::unique_ptr<Enemy> enemy_;
+
+	//“G‚Ì’e‚Ìƒ‚ƒfƒ‹
+	std::unique_ptr<Model> enemyBulletModel_;
+
+	//“G‚Ì’e
+	std::list<std::unique_ptr<EnemyBullet>> enemyBullet_;
 };

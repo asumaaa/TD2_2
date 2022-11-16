@@ -33,7 +33,7 @@ private:
 	XMFLOAT3 position_ = { 0,0,0 };
 
 	//弾のタイマー
-	int bulletTimer_ = 4;
+	int bulletTimer_ = 0;
 
 	//体力
 	float hp_ = 100;
