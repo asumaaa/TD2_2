@@ -114,14 +114,6 @@ void GameScene::Update()
 		{return bullet->IsDead(); }
 	);
 
-
-	//フラグが立ったら爆発エフェクト発生
-	/*if (input_->TriggerKey(DIK_SPACE))
-	{
-		std::unique_ptr<BreakEffect> newEffect = std::make_unique<BreakEffect>();
-		newEffect->Initialize(dxCommon_->GetDevice(), starDustModel_.get(), player_->GetPosition());
-		breakEffect_.push_back(std::move(newEffect));
-	}*/
 	//プレイヤーの弾更新
 	for (std::unique_ptr<BreakEffect>& effect : breakEffect_)
 	{
@@ -153,6 +145,7 @@ void GameScene::Draw()
 
 void GameScene::EnmeyCollition()
 {
+	//敵に弾が当たったら弾消滅 爆発エフェクト作成
 	for (std::unique_ptr<PlayerBullet>& bullet : playerBullet_)
 	{
 		if (bullet->GetPosition().x > -enemy_->GetPosition().x - enemy_->GetScale().x && bullet->GetPosition().x < enemy_->GetPosition().x + enemy_->GetScale().x &&

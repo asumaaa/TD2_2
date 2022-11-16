@@ -63,6 +63,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	delete fps;
 	delete gameScene;
+	/*delete dx;*/
 
 	masage->ExitGameloop();
 

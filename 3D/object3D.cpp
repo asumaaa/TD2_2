@@ -40,12 +40,12 @@ void Object3D::Update(XMMATRIX& matView, XMMATRIX& matProjection)
 	// スケール、回転、平行移動行列の計算
 	matScale = XMMatrixScaling(scale.x, scale.y, scale.z);
 	matRot = XMMatrixIdentity();
-	/*matRot *= XMMatrixRotationY(rotation.y);
-	matRot *= XMMatrixRotationZ(rotation.z);
-	matRot *= XMMatrixRotationX(rotation.x);*/
+	matRot *= XMMatrixRotationY(rotation.y);
 	matRot *= XMMatrixRotationZ(rotation.z);
 	matRot *= XMMatrixRotationX(rotation.x);
-	matRot *= XMMatrixRotationY(rotation.y);
+	/*matRot *= XMMatrixRotationZ(rotation.z);
+	matRot *= XMMatrixRotationX(rotation.x);
+	matRot *= XMMatrixRotationY(rotation.y);*/
 	matTrans = XMMatrixTranslation(position.x, position.y, position.z);
 
 	// ワールド行列の合成
