@@ -15,6 +15,8 @@
 #include "DXInput.h"
 #include "PlayerBullet.h"
 #include "BreakEffect.h"
+#include "Sprite.h"
+#include "Enemy.h"
 
 class GameScene
 {
@@ -26,6 +28,7 @@ public:
 	void Update();
 	void Draw();
 
+	void EnmeyCollition();
 	//メンバ変数
 private: 
 	//デバイスとinput
@@ -64,4 +67,10 @@ private:
 
 	//爆発エフェクト
 	std::list<std::unique_ptr<BreakEffect>> breakEffect_;
+
+	//敵のモデル
+	std::unique_ptr<Model> enemyModel_;
+
+	//敵
+	std::unique_ptr<Enemy> enemy_;
 };

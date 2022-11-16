@@ -31,9 +31,9 @@ void BreakEffect::Initialize(ID3D12Device* device, Model* model, XMFLOAT3 positi
 	for (int i = 0; i < breakEffectNum; i++)
 	{
 		position_[i] = position;
-		scale_[i].x = static_cast<float>(rand() % 10) / 10;
-		scale_[i].y = static_cast<float>(rand() % 10) / 10;
-		scale_[i].z = static_cast<float>(rand() % 10) / 10;
+		scale_[i].x = static_cast<float>(rand() % 30) / 10;
+		scale_[i].y = static_cast<float>(rand() % 30) / 10;
+		scale_[i].z = static_cast<float>(rand() % 30) / 10;
 		rotation_[i].x= static_cast<float>(rand() % 36) / 18 * PI;
 		rotation_[i].y= static_cast<float>(rand() % 36) / 18 * PI;
 		rotation_[i].z= static_cast<float>(rand() % 36) / 18 * PI;

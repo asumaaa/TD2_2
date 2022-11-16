@@ -118,7 +118,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(projectDir)input;$(projectDir);$(projectDir)3D;$(projectDir)base;$(projectDir)imgui;$(projectDir)math;$(projectDir)scene;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(projectDir)input;$(projectDir);$(projectDir)3D;$(projectDir)base;$(projectDir)imgui;$(projectDir)math;$(projectDir)scene;$(projectDir)player;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -133,7 +133,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(projectDir)input;$(projectDir);$(projectDir)3D;$(projectDir)base;$(projectDir)imgui;$(projectDir)math;$(projectDir)scene;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(projectDir)input;$(projectDir);$(projectDir)3D;$(projectDir)base;$(projectDir)imgui;$(projectDir)math;$(projectDir)scene;$(projectDir)player;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -148,10 +148,12 @@
     <ClCompile Include="base\FPS.cpp" />
     <ClCompile Include="base\Masage.cpp" />
     <ClCompile Include="base\Sound.cpp" />
+    <ClCompile Include="base\Sprite.cpp" />
     <ClCompile Include="base\Texture.cpp" />
     <ClCompile Include="base\WinApp.cpp" />
     <ClCompile Include="BreakEffect.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
     <ClCompile Include="imgui\imgui_draw.cpp" />
@@ -165,8 +167,8 @@
     <ClCompile Include="math\Math2.cpp" />
     <ClCompile Include="math\Matrix4.cpp" />
     <ClCompile Include="Model.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="PlayerBullet.cpp" />
+    <ClCompile Include="player\Player.cpp" />
+    <ClCompile Include="player\PlayerBullet.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
     <ClCompile Include="Smoke.cpp" />
     <ClCompile Include="StarDust.cpp" />
@@ -177,10 +179,12 @@
     <ClInclude Include="base\FPS.h" />
     <ClInclude Include="base\Masage.h" />
     <ClInclude Include="base\Sound.h" />
+    <ClInclude Include="base\Sprite.h" />
     <ClInclude Include="base\Texture.h" />
     <ClInclude Include="base\WinApp.h" />
     <ClInclude Include="BreakEffect.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
     <ClInclude Include="imgui\imgui_impl_dx12.h" />
@@ -195,8 +199,8 @@
     <ClInclude Include="math\Math2.h" />
     <ClInclude Include="math\Matrix4.h" />
     <ClInclude Include="Model.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="PlayerBullet.h" />
+    <ClInclude Include="player\Player.h" />
+    <ClInclude Include="player\PlayerBullet.h" />
     <ClInclude Include="scene\GameScene.h" />
     <ClInclude Include="Smoke.h" />
     <ClInclude Include="StarDust.h" />
@@ -232,6 +236,14 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
     </FxCompile>
+    <FxCompile Include="SpritePS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="SpriteVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
     <FxCompile Include="VS2.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
@@ -242,6 +254,7 @@
   <ItemGroup>
     <None Include="Basic.hlsli" />
     <None Include="Obj.hlsli" />
+    <None Include="Sprite.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">

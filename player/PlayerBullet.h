@@ -16,6 +16,11 @@ public:
 	void OnCollision();
 	void Draw(ID3D12GraphicsCommandList* cmdList);
 	bool IsDead()const { return isDead_; }
+	void SetIsDeadTrue() { isDead_ = true; };
+	//ゲッター　セッター　
+	XMFLOAT3 GetPosition() { return position_; };
+	XMFLOAT3 GetRotation() { return rotation_; };
+	XMFLOAT3 GetScale() { return scale_; };
 private:
 	ID3D12Device* device_;
 	Model* model_ = nullptr;

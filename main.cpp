@@ -52,7 +52,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		// 4. •`‰æƒRƒ}ƒ“ƒh
 		gameScene->Draw();
 
-
 		dx->PostDraw();
 
 #pragma endregion

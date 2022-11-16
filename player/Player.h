@@ -34,7 +34,7 @@ private:
 	XMFLOAT3 scale_ = { 1,1,1 };
 	XMFLOAT3 rotation1_ = { 0,0,0 };	//プレイヤー本来の角度
 	XMFLOAT3 rotation2_ = { 0,0,0 };	//オブジェクトに渡す角度
-	XMFLOAT3 position_ = { 0,0,0 };
+	XMFLOAT3 position_ = { 0,0,-100 };
 
 	//スピード
 	XMFLOAT3 velocity;
@@ -42,5 +42,8 @@ private:
 
 	//弾のタイマー
 	int bulletTimer_ = 4;
+
+	//体力
+	float hp_ = 5;
 };
 

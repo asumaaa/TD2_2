@@ -24,6 +24,11 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 	newModel->Initialize(dxCommon_->GetDevice(), "fighter", "Resources/fighter.png");
 	playerModel_.reset(newModel);
 
+	//敵のモデル初期化
+	Model* newEnemyModel = new Model();
+	newEnemyModel->Initialize(dxCommon_->GetDevice(), "enemy", "Resources/enemy.png");
+	enemyModel_.reset(newEnemyModel);
+
 	//弾のモデルの初期化
 	Model* newBulletModel = new Model();
 	newBulletModel->Initialize(dxCommon_->GetDevice(), "bullet", "Resources/bullet.png");
@@ -43,6 +48,11 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 	Smoke* newSmoke = new Smoke();
 	newSmoke->Initialize(dxCommon_->GetDevice(), starDustModel_.get(), player_->GetPosition());
 	smoke_.reset(newSmoke);
+
+	//敵初期化
+	Enemy* newEnemy = new Enemy();
+	newEnemy->Initialize(dxCommon_->GetDevice(), enemyModel_.get());
+	enemy_.reset(newEnemy);
 
 	//星屑初期化
 	StarDust* newStarDust = new StarDust();
@@ -71,6 +81,9 @@ void GameScene::Update()
 	XMFLOAT3 up_(0,1,0);
 	XMMATRIX matView = XMMatrixLookAtLH(XMLoadFloat3(&eye_), XMLoadFloat3(&target_), XMLoadFloat3(&up_));*/
 
+	//当たり判定更新
+	EnmeyCollition();
+
 	//星屑更新
 	starDust_->Update(matView, matProjection);
 
@@ -79,6 +92,9 @@ void GameScene::Update()
 
 	//プレイヤーの煙更新
 	smoke_->Update(matView, matProjection,player_->GetPosition(), player_->GetRotation());
+
+	//敵更新
+	enemy_->Update(matView, matProjection);
 	
 
 	//プレイヤーから受け取ったフラグで弾生成
@@ -100,12 +116,12 @@ void GameScene::Update()
 
 
 	//フラグが立ったら爆発エフェクト発生
-	if (input_->TriggerKey(DIK_SPACE))
+	/*if (input_->TriggerKey(DIK_SPACE))
 	{
 		std::unique_ptr<BreakEffect> newEffect = std::make_unique<BreakEffect>();
 		newEffect->Initialize(dxCommon_->GetDevice(), starDustModel_.get(), player_->GetPosition());
 		breakEffect_.push_back(std::move(newEffect));
-	}
+	}*/
 	//プレイヤーの弾更新
 	for (std::unique_ptr<BreakEffect>& effect : breakEffect_)
 	{
@@ -122,6 +138,7 @@ void GameScene::Draw()
 	starDust_->Draw(dxCommon_->GetCommandList());
 	player_->Draw(dxCommon_->GetCommandList());
 	smoke_->Draw(dxCommon_->GetCommandList());
+	enemy_->Draw(dxCommon_->GetCommandList());
 	//プレイヤーの弾更新
 	for (std::unique_ptr<PlayerBullet>& bullet : playerBullet_)
 	{
@@ -131,5 +148,22 @@ void GameScene::Draw()
 	for (std::unique_ptr<BreakEffect>& effect : breakEffect_)
 	{
 		effect->Draw(dxCommon_->GetCommandList());
+	}
+}
+
+void GameScene::EnmeyCollition()
+{
+	for (std::unique_ptr<PlayerBullet>& bullet : playerBullet_)
+	{
+		if (bullet->GetPosition().x > -enemy_->GetPosition().x - enemy_->GetScale().x && bullet->GetPosition().x < enemy_->GetPosition().x + enemy_->GetScale().x &&
+			bullet->GetPosition().y > -enemy_->GetPosition().y - enemy_->GetScale().y && bullet->GetPosition().y < enemy_->GetPosition().y + enemy_->GetScale().y &&
+			bullet->GetPosition().z > -enemy_->GetPosition().z - enemy_->GetScale().z && bullet->GetPosition().z < enemy_->GetPosition().z + enemy_->GetScale().z)
+		{
+			std::unique_ptr<BreakEffect> newEffect = std::make_unique<BreakEffect>();
+			newEffect->Initialize(dxCommon_->GetDevice(), starDustModel_.get(), bullet->GetPosition());
+			breakEffect_.push_back(std::move(newEffect));
+
+			bullet->SetIsDeadTrue();
+		}
 	}
 }
