@@ -25,7 +25,6 @@ public:
 	void Initialize(DirectXCommon* dxCommon, Input* input);
 	void Update();
 	void Draw();
-	void Delete();
 
 	//ƒƒ“ƒo•Ï”
 private: 

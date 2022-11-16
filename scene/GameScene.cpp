@@ -133,13 +133,3 @@ void GameScene::Draw()
 		effect->Draw(dxCommon_->GetCommandList());
 	}
 }
-
-void GameScene::Delete()
-{
-	/*starDust_->Delete();*/
-	/*delete starDust_.get();
-	delete starDustModel_.get();
-	delete playerModel_.get();
-	delete player_.get();
-	delete camera_.get();*/
-}
