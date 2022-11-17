@@ -89,7 +89,7 @@ void GameScene::Update()
 
 	//当たり判定更新
 	EnmeyCollition();
-
+	PlayerCollition();
 
 	//プレイヤー更新
 	player_->Update(matView, matProjection);
@@ -176,9 +176,29 @@ void GameScene::EnmeyCollition()
 	//敵に弾が当たったら弾消滅 爆発エフェクト作成
 	for (std::unique_ptr<PlayerBullet>& bullet : playerBullet_)
 	{
-		if (bullet->GetPosition().x > -enemy_->GetPosition().x - enemy_->GetScale().x && bullet->GetPosition().x < enemy_->GetPosition().x + enemy_->GetScale().x &&
-			bullet->GetPosition().y > -enemy_->GetPosition().y - enemy_->GetScale().y && bullet->GetPosition().y < enemy_->GetPosition().y + enemy_->GetScale().y &&
-			bullet->GetPosition().z > -enemy_->GetPosition().z - enemy_->GetScale().z && bullet->GetPosition().z < enemy_->GetPosition().z + enemy_->GetScale().z)
+		float x = bullet->GetPosition().x - enemy_->GetPosition().x;
+		float y = bullet->GetPosition().y - enemy_->GetPosition().y;
+		float z = bullet->GetPosition().z - enemy_->GetPosition().z;
+		if ((x * x) + (y * y) + (z * z) <= 100)
+		{
+			std::unique_ptr<BreakEffect> newEffect = std::make_unique<BreakEffect>();
+			newEffect->Initialize(dxCommon_->GetDevice(), starDustModel_.get(), bullet->GetPosition());
+			breakEffect_.push_back(std::move(newEffect));
+
+			bullet->SetIsDeadTrue();
+		}
+	}
+}
+
+void GameScene::PlayerCollition()
+{
+	//敵に弾が当たったら弾消滅 爆発エフェクト作成
+	for (std::unique_ptr<EnemyBullet>& bullet : enemyBullet_)
+	{
+		float x = bullet->GetPosition().x - player_->GetPosition().x;
+		float y = bullet->GetPosition().y - player_->GetPosition().y;
+		float z = bullet->GetPosition().z - player_->GetPosition().z;
+		if ((x * x) + (y * y) + (z * z) <= 25)
 		{
 			std::unique_ptr<BreakEffect> newEffect = std::make_unique<BreakEffect>();
 			newEffect->Initialize(dxCommon_->GetDevice(), starDustModel_.get(), bullet->GetPosition());
