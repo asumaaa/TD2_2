@@ -10,7 +10,7 @@ public:
 	PlayerBullet* GetInstance();
 	PlayerBullet();
 	~PlayerBullet();
-	void Initialize(ID3D12Device* device, Model* model,const XMFLOAT3& position, const XMFLOAT3& velocity);
+	void Initialize(ID3D12Device* device, Model* model,const XMFLOAT3& position, const XMFLOAT3& rotation, const XMFLOAT3& velocity);
 	void Update(XMMATRIX& matView, XMMATRIX& matProjection);
 	void Move();
 	void OnCollision();

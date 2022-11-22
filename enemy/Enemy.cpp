@@ -1,4 +1,6 @@
 #include "Enemy.h"
+#include "Math2.h"
+#include "Math.h"
 
 Enemy* Enemy::GetInstance()
 {
@@ -26,9 +28,12 @@ void Enemy::Initialize(ID3D12Device* device, Model* model)
 	object3d_.reset(newObject);
 }
 
-void Enemy::Update(XMMATRIX& matView, XMMATRIX& matProjection)
+void Enemy::Update(XMMATRIX& matView, XMMATRIX& matProjection, XMFLOAT3 playerPosition)
 {
 	Move();
+
+	addRotation_ = atan2(playerPosition.x, playerPosition.z);
+	rotation_.y = (addRotation_);
 
 	object3d_->setScale(scale_);
 	object3d_->setRotation(rotation_);
@@ -37,13 +42,34 @@ void Enemy::Update(XMMATRIX& matView, XMMATRIX& matProjection)
 	object3d_->Update(matView, matProjection);
 }
 
-bool Enemy::Attack()
+bool Enemy::Attack(XMFLOAT3 playerPosition)
 {
-	bulletTimer_++;
-	if (bulletTimer_ % 10 == 0)
+	if (phase1Flag == false)
 	{
-		return true;
+		phase1Timer1_++;
+		//プレイヤーの座標保存
+		if (phase1Timer1_ > 200)
+		{
+			phase1Flag = true;
+		}
 	}
+	if (phase1Flag == true)
+	{
+		phase1Timer2_++;
+		if (phase1Timer2_ % 20 == 0)
+		{
+			return true;
+		}
+		if (phase1Timer2_ > 61)
+		{
+			phase1Timer1_ = 0;
+			phase1Timer2_ = 0;
+			phase1Flag = false;
+		}
+	}
+	/*addRotation_ = atan2(playerPosition_.x, playerPosition_.z);
+	rotation_.y = (addRotation_ + PI / 2);*/
+
     return false;
 }
 

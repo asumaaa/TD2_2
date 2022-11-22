@@ -46,9 +46,6 @@
     <Filter Include="imgui">
       <UniqueIdentifier>{8ce544f1-f4ed-4a7b-a58d-836b454e8ce5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\player">
-      <UniqueIdentifier>{4517d2b9-c0cf-4db2-b64e-85bfec13e410}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\player">
       <UniqueIdentifier>{1d347b01-b686-4a11-9c38-0c9b680556ab}</UniqueIdentifier>
     </Filter>
@@ -63,6 +60,9 @@
     </Filter>
     <Filter Include="ヘッダー ファイル\enemy">
       <UniqueIdentifier>{0a673022-d572-46e4-94de-2bce7277ea42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\enemy\player">
+      <UniqueIdentifier>{4517d2b9-c0cf-4db2-b64e-85bfec13e410}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -234,10 +234,10 @@
       <Filter>ヘッダー ファイル\base</Filter>
     </ClInclude>
     <ClInclude Include="player\Player.h">
-      <Filter>ヘッダー ファイル\player</Filter>
+      <Filter>ヘッダー ファイル\enemy\player</Filter>
     </ClInclude>
     <ClInclude Include="player\PlayerBullet.h">
-      <Filter>ヘッダー ファイル\player</Filter>
+      <Filter>ヘッダー ファイル\enemy\player</Filter>
     </ClInclude>
     <ClInclude Include="effect\BreakEffect.h">
       <Filter>ヘッダー ファイル\effect</Filter>

@@ -1,4 +1,5 @@
 #include "EnemyBullet.h"
+#include "Math2.h"
 
 EnemyBullet* EnemyBullet::GetInstance()
 {
@@ -14,13 +15,14 @@ EnemyBullet::~EnemyBullet()
 {
 }
 
-void EnemyBullet::Initialize(ID3D12Device* device, Model* model, const XMFLOAT3& position, const XMFLOAT3& velocity)
+void EnemyBullet::Initialize(ID3D12Device* device, Model* model, const XMFLOAT3& enemyPosition, const XMFLOAT3& enemyRotation, const XMFLOAT3& playerPosition)
 {
 	//ˆø”‚©‚çŽó‚¯Žæ‚Á‚½’l‚ð•Ï”‚É‘ã“ü
 	this->device_ = device;
 	this->model_ = model;
-	this->position_ = position;
-	this->velocity_ = velocity;
+	this->position_ = enemyPosition;
+	this->rotation_ = enemyRotation;
+	this->playerPosition_ = playerPosition;
 
 	Object3D* newObject = new Object3D();
 	newObject->Initialize(device_, model_);
@@ -29,6 +31,10 @@ void EnemyBullet::Initialize(ID3D12Device* device, Model* model, const XMFLOAT3&
 	object3d_->setPosition(position_);
 	object3d_->setRotation(rotation_);
 	object3d_->setScale(scale_);
+
+	velocity_.x = position_.x + playerPosition_.x;
+	velocity_.y = position_.y + playerPosition_.y;
+	velocity_.z = position_.z + playerPosition_.z;
 }
 
 void EnemyBullet::Update(XMMATRIX& matView, XMMATRIX& matProjection)
@@ -50,9 +56,9 @@ void EnemyBullet::Update(XMMATRIX& matView, XMMATRIX& matProjection)
 
 void EnemyBullet::Move()
 {
-	position_.x += velocity_.x * speed;
-	position_.y += velocity_.y * speed;
-	position_.z += velocity_.z * speed;
+	position_.x += vector3Normalize(velocity_).x * speed;
+	position_.y += vector3Normalize(velocity_).y * speed;
+	position_.z += vector3Normalize(velocity_).z * speed;
 }
 
 void EnemyBullet::OnCollision()

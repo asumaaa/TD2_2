@@ -42,7 +42,123 @@ void Camera::Update()
 	matView_ = XMMatrixLookAtLH(XMLoadFloat3(&eye_), XMLoadFloat3(&target_), XMLoadFloat3(&up_));
 }
 
+void Camera::TitleUpdate()
+{
+	TitleHomind();
+	//行列計算
+	matView_ = XMMatrixLookAtLH(XMLoadFloat3(&eye_), XMLoadFloat3(&target_), XMLoadFloat3(&up_));
+}
+
+void Camera::MoveToGameUpdate()
+{
+	//タイマー始動
+	moveToGameTimer_++;
+
+	//時期が画面の外に出続けるまで架空の自機をホーミング
+	if (moveToGameTimer_ < 280)
+	{
+		TitleHomind();
+	}
+
+	if (moveToGameTimer_ >= 280 && moveToGameTimer_ <= 400)
+	{
+		target_.y += 8;
+		eye_.y += 7;
+	}
+
+	//行列計算
+	matView_ = XMMatrixLookAtLH(XMLoadFloat3(&eye_), XMLoadFloat3(&target_), XMLoadFloat3(&up_));
+}
+
+void Camera::Phase1RecollectionUpdate()
+{
+	//eyeの初期位置をセット
+	if (phase1RecollectionTimer_ == 0)
+	{
+		eye_ = { -100, -30, -80 };
+		target_ = { -30, 0, 0 };
+	}
+
+	phase1RecollectionTimer_++;
+
+	if (phase1RecollectionTimer_ < 480)
+	{
+		eye_.x += 0.4;
+		eye_.y += 0.2;
+		eye_.z -= 0.2;
+
+		target_.x += 0.1;
+	}
+
+	matView_ = XMMatrixLookAtLH(XMLoadFloat3(&eye_), XMLoadFloat3(&target_), XMLoadFloat3(&up_));
+}
+
 void Camera::homind()
+{
+	//左右
+	float addX = dxInput_->GamePad.state.Gamepad.sThumbRX / (32767.0f) * (PI / 90);
+	float moveRange = PI;
+	if (dxInput_->GamePad.state.Gamepad.sThumbRX > 15000 || dxInput_->GamePad.state.Gamepad.sThumbRX < -15000)
+	{
+		if (lengthX_ < moveRange && lengthX_ > -moveRange)
+		{
+			lengthX_ -= addX;
+			lengthZ_ -= addX;
+		}
+		if (lengthX_ > moveRange)
+		{
+			lengthX_ = moveRange - addX;
+			lengthZ_ = moveRange - addX;
+		}
+		if (lengthX_ < -moveRange)
+		{
+			lengthX_ = -moveRange - addX;
+			lengthZ_ = -moveRange - addX;
+		}
+	}
+	//ステックに触っていないときの処理
+	else if (lengthX_ != 0)
+	{
+		if (lengthX_ < -(PI / 90))
+		{
+			lengthX_ += (PI / 90);
+			lengthZ_ += (PI / 90);
+		}
+		else if (lengthX_ > (PI / 90))
+		{
+			lengthX_ -= (PI / 90);
+			lengthZ_ -= (PI / 90);
+		}
+	}
+
+	float x = 0;
+	float y = 0;
+	float z = 0;
+
+	//カメラをプレイヤーの真後ろに移動
+	x = player_->GetPosition1().x + (/*sin(-player_->GetRotation().x + (PI / 2) + lengthX_) **/ cos(-player_->GetRotation().y - (PI / 2) + lengthX_) * length_);
+	y = player_->GetPosition1().y + (cos(-player_->GetRotation().x + (PI * 18 / 40)) * length_);
+	z = player_->GetPosition1().z + (/*sin(-player_->GetRotation().x + (PI / 2) + lengthZ_) **/ sin(-player_->GetRotation().y - (PI / 2) + lengthZ_) * length_);
+
+
+	//天井を調整
+	if (sin(-player_->GetRotation().x + (PI / 2)) <= 0)
+	{
+		up_ = { 0,-1,0 };
+	}
+	else
+	{
+		up_ = { 0,1,0 };
+	}
+	up_ = { 0,1,0 };
+
+	//カメラの座標に代入
+	eye_ = { x,y,z };
+	//注視点をプレイヤーの座標にする
+	target_ = { player_->GetPosition1().x ,player_->GetPosition1().y,player_->GetPosition1().z };
+}
+
+void Camera::TitleHomind()
 {
 	//左右
 	float addX = dxInput_->GamePad.state.Gamepad.sThumbRX / (32767.0f) * (PI / 90);
@@ -85,9 +201,9 @@ void Camera::homind()
 	float z = 0;
 
 	//カメラをプレイヤーの真後ろに移動
-	x = player_->GetPosition().x + (/*sin(-player_->GetRotation().x + (PI / 2) + lengthX_) **/ cos(-player_->GetRotation().y - (PI / 2) + lengthX_) * length_);
-	y = player_->GetPosition().y + (cos(-player_->GetRotation().x + (PI * 18 / 40)) * length_);
-	z = player_->GetPosition().z + (/*sin(-player_->GetRotation().x + (PI / 2) + lengthZ_) **/ sin(-player_->GetRotation().y - (PI / 2) + lengthZ_) * length_);
+	x = player_->GetPosition1().x + (/*sin(-player_->GetRotation().x + (PI / 2) + lengthX_) **/ cos(-player_->GetRotation().y - (PI * 0.8) + lengthX_) * titleLength_);
+	y = player_->GetPosition1().y + (cos(-player_->GetRotation().x + (PI * 15 / 40)) * titleLength_);
+	z = player_->GetPosition1().z + (/*sin(-player_->GetRotation().x + (PI / 2) + lengthZ_) **/ sin(-player_->GetRotation().y - (PI * 0.8) + lengthZ_) * titleLength_);
 
 
 	//天井を調整
@@ -104,7 +220,7 @@ void Camera::homind()
 	//カメラの座標に代入
 	eye_ = { x,y,z };
 	//注視点をプレイヤーの座標にする
-	target_ = { player_->GetPosition().x ,player_->GetPosition().y,player_->GetPosition().z };
+	target_ = { player_->GetPosition1().x ,player_->GetPosition1().y,player_->GetPosition1().z };
 }
 
 void Camera::SetTarget(XMFLOAT3 pos)

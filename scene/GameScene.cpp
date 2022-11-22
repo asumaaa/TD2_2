@@ -7,6 +7,9 @@ GameScene::GameScene()
 GameScene::~GameScene()
 {
 	delete dxInput;
+	/*delete &titleSprite_;
+	delete &spriteCommon_;
+	delete sprite_;*/
 	/*delete starDust_.get();
 	delete starDustModel_.get();
 	delete playerModel_.get();
@@ -26,7 +29,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 
 	//敵のモデル初期化
 	Model* newEnemyModel = new Model();
-	newEnemyModel->Initialize(dxCommon_->GetDevice(), "enemy", "Resources/enemy.png");
+	newEnemyModel->Initialize(dxCommon_->GetDevice(), "boss", "Resources/boss.png");
 	enemyModel_.reset(newEnemyModel);
 
 	//弾のモデルの初期化
@@ -37,7 +40,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 
 	//敵の弾のモデルの初期化
 	Model* newEnemyBulletModel = new Model();
-	newEnemyBulletModel->Initialize(dxCommon_->GetDevice(), "bullet", "Resources/enemyBullet.png");
+	newEnemyBulletModel->Initialize(dxCommon_->GetDevice(), "enemyBullet", "Resources/enemyBullet.png");
 	enemyBulletModel_.reset(newEnemyBulletModel);
 
 	//星屑のモデルの初期化
@@ -49,10 +52,12 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 	Player* newPlayer = new Player();
 	newPlayer->Initialize(dxCommon_->GetDevice(), playerModel_.get(),dxInput);
 	player_.reset(newPlayer);
+	//座標をセット
+	player_->SetPhase1();
 
 	//プレイヤーの煙初期化
 	Smoke* newSmoke = new Smoke();
-	newSmoke->Initialize(dxCommon_->GetDevice(), starDustModel_.get(), player_->GetPosition());
+	newSmoke->Initialize(dxCommon_->GetDevice(), starDustModel_.get(), player_->GetPosition1());
 	smoke_.reset(newSmoke);
 
 	//敵初期化
@@ -65,6 +70,74 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 	newStarDust->Initialize(dxCommon_->GetDevice(), starDustModel_.get());
 	starDust_.reset(newStarDust);
 
+	//スプライト初期化
+	spriteCommon_ = sprite_->SpriteCommonCreate(dxCommon_->GetDevice(), 1280, 720);
+	sprite_->SpriteCommonLoadTexture(spriteCommon_, 0, L"Resources/title.png", dxCommon_->GetDevice());
+	sprite_->SpriteCommonLoadTexture(spriteCommon_, 1, L"Resources/operation.png", dxCommon_->GetDevice());
+	sprite_->SpriteCommonLoadTexture(spriteCommon_, 2, L"Resources/operation1.png", dxCommon_->GetDevice());
+	sprite_->SpriteCommonLoadTexture(spriteCommon_, 3, L"Resources/operation2.png", dxCommon_->GetDevice());
+	sprite_->SpriteCommonLoadTexture(spriteCommon_, 4, L"Resources/playerHp.png", dxCommon_->GetDevice());
+	sprite_->SpriteCommonLoadTexture(spriteCommon_, 5, L"Resources/enemyHp.png", dxCommon_->GetDevice());
+	sprite_->SpriteCommonLoadTexture(spriteCommon_, 6, L"Resources/enemyHp1.png", dxCommon_->GetDevice());
+	titleSprite_ = titleSprite_.SpriteCreate(dxCommon_->GetDevice(), 1280, 720);
+	operationSprite_ = operationSprite_.SpriteCreate(dxCommon_->GetDevice(), 1280, 720);	//oparation.png
+	operation1Sprite_ = operation1Sprite_.SpriteCreate(dxCommon_->GetDevice(), 1280, 720);	//oparation1.png
+	operation2Sprite_ = operation2Sprite_.SpriteCreate(dxCommon_->GetDevice(), 1280, 720);	//oparation2.png
+	playerHpSprite_ = playerHpSprite_.SpriteCreate(dxCommon_->GetDevice(), 1280, 720);	//playerHp.png
+	enemyHpSprite_ = enemyHpSprite_.SpriteCreate(dxCommon_->GetDevice(), 1280, 720);	//playerHp.png
+	enemyHp1Sprite_ = enemyHp1Sprite_.SpriteCreate(dxCommon_->GetDevice(), 1280, 720);	//enemyHp.png
+	//テクスチャ番号セット
+	titleSprite_.SetTexNumber(0);
+	operationSprite_.SetTexNumber(1);	//oparation.png
+	operation1Sprite_.SetTexNumber(2);	//oparation1.png
+	operation2Sprite_.SetTexNumber(3);	//oparation2.png
+	playerHpSprite_.SetTexNumber(4);	//playerHp.png
+	enemyHpSprite_.SetTexNumber(5);	//playerHp.png
+	enemyHp1Sprite_.SetTexNumber(6);	//enemyHp.png
+	//テクスチャサイズ設定
+	//タイトル
+	titleSprite_.SetScale(XMFLOAT2(1280, 200));
+	//操作
+	operationSprite_.SetScale(XMFLOAT2(600, 80));
+	operationSprite_.SetPosition(XMFLOAT3(350,600,0));
+	//操作1
+	operation1Sprite_.SetScale(XMFLOAT2(1280, 200));
+	//操作2
+	operation2Sprite_.SetScale(XMFLOAT2(1280, 200));
+	//プレイヤーのHP
+	playerHpSprite_.SetScale(XMFLOAT2(1280, 200));
+	//敵のHP1
+	enemyHpSprite_.SetScale(XMFLOAT2(820, 100));
+	enemyHpSprite_.SetPosition(XMFLOAT3(200, -90,0));
+	//敵のHP2
+	enemyHp1Sprite_.SetScale(XMFLOAT2(0, 100));
+	enemyHp1Sprite_.SetPosition(XMFLOAT3(242, 10,0));
+
+	//反映
+	//タイトル
+	titleSprite_.SpriteTransferVertexBuffer(titleSprite_);
+	titleSprite_.SpriteUpdate(titleSprite_, spriteCommon_);
+	//操作
+	operationSprite_.SpriteTransferVertexBuffer(operationSprite_);
+	operationSprite_.SpriteUpdate(operationSprite_, spriteCommon_);
+	//操作1
+	operation1Sprite_.SpriteTransferVertexBuffer(operation1Sprite_);
+	operation1Sprite_.SpriteUpdate(operation1Sprite_, spriteCommon_);
+	//操作2
+	operation2Sprite_.SpriteTransferVertexBuffer(operation2Sprite_);
+	operation2Sprite_.SpriteUpdate(operation2Sprite_, spriteCommon_);
+	//プレイヤーのHP
+	playerHpSprite_.SpriteTransferVertexBuffer(playerHpSprite_);
+	playerHpSprite_.SpriteUpdate(playerHpSprite_, spriteCommon_);
+	//敵のHP1
+	enemyHpSprite_.SpriteTransferVertexBuffer(enemyHpSprite_);
+	enemyHpSprite_.SpriteUpdate(enemyHpSprite_, spriteCommon_);
+	//敵のHP2
+	enemyHp1Sprite_.SpriteTransferVertexBuffer(enemyHp1Sprite_);
+	enemyHp1Sprite_.SpriteUpdate(enemyHp1Sprite_, spriteCommon_);
+	// スプライト用パイプライン生成呼び出し
+	PipelineSet spritePipelineSet = sprite_->SpriteCreateGraphicsPipeline(dxCommon_->GetDevice());
+
 	//カメラ初期化
 	Camera* newCamera = new Camera();
 	newCamera->Initialize(input_,dxInput, player_.get());
@@ -75,68 +148,168 @@ void GameScene::Update()
 {
 	//コントローラー更新
 	dxInput->InputProcess();
+	//シーンごとの処理
+	(this->*Scene_[scene_])();
+}
 
+void GameScene::Draw()
+{
+	(this->*SceneDraw_[sceneDraw_])();
+}
+
+void GameScene::Title()
+{
+	//Aボタンでゲームに移るフラグを立てる
+	if (dxInput->GamePad.state.Gamepad.wButtons & XINPUT_GAMEPAD_A)
+	{
+		moveToGameFlag_ = true;
+	}
+
+	//プレイヤーからフラグを受け取ったらゲームに移る
+	if (player_->GetGameStartFlag_() == true)
+	{
+		scene_ = static_cast<size_t>(Scene::Phase1Recollection);
+		sceneDraw_ = static_cast<size_t>(SceneDraw::Phase1RecollectionDraw);
+		//プレイヤーの座標をゲーム用にセット
+		player_->SetPhase1();
+		moveToGameFlag_ = false;	//フラグリセット
+	}
+
+	//カメラ更新
+	//タイトル画面
+	if (moveToGameFlag_ == false)
+	{
+		camera_->TitleUpdate();
+	}
+	//ゲームに移る時の更新
+	if (moveToGameFlag_ == true)
+	{
+		camera_->MoveToGameUpdate();
+	}
+
+	XMMATRIX matView = camera_->GetMatView();
+	XMMATRIX matProjection = camera_->GetMatProjection();
+	
+
+	//プレイヤー更新
+	//タイトル画面
+	if (moveToGameFlag_ == false)
+	{
+		player_->TitleUpdate(matView, matProjection);
+	}
+	//ゲームに移る時の更新
+	if (moveToGameFlag_ == true)
+	{
+		player_->MoveToGameUpdate(matView, matProjection);
+	}
+
+	//プレイヤーの煙更新
+	smoke_->Update(matView, matProjection, player_->GetPosition2(), player_->GetRotation());
+
+	//星屑更新
+	starDust_->Update(matView, matProjection);
+}
+
+void GameScene::Phase1()
+{
 	//カメラ更新
 	camera_->Update();
 	XMMATRIX matView = camera_->GetMatView();
 	XMMATRIX matProjection = camera_->GetMatProjection();
 
-	//デバッグ用視点
-	/*XMFLOAT3 eye_(0,5,-30);
-	XMFLOAT3 target_(0,0,0);
-	XMFLOAT3 up_(0,1,0);
-	XMMATRIX matView = XMMatrixLookAtLH(XMLoadFloat3(&eye_), XMLoadFloat3(&target_), XMLoadFloat3(&up_));*/
-
 	//当たり判定更新
 	EnmeyCollition();
 	PlayerCollition();
 
+	//タイマー更新
+	phase1Timer_++;
+
 	//プレイヤー更新
 	player_->Update(matView, matProjection);
 
-	//プレイヤーの煙更新
-	smoke_->Update(matView, matProjection,player_->GetPosition(), player_->GetRotation());
+	//敵更新
+	enemy_->Update(matView, matProjection,player_->GetPosition1());
 
 	//星屑更新
 	starDust_->Update(matView, matProjection);
 
-	//敵更新
-	enemy_->Update(matView, matProjection);
+	//1フレーム目から更新開始
+	if (phase1Timer_ >= 10)
+	{
+		//プレイヤーの煙更新
+		smoke_->Update(matView, matProjection, player_->GetPosition2(), player_->GetRotation());
+	}
+
+	//敵のHPの枠を画面外からおろす処理
+	if (phase1Timer_ >= 0 && phase1Timer_ <= 100)
+	{
+		addEnemyHpSprite_ = phase1Timer_ - 90;
+		enemyHpSprite_.SetPosition(XMFLOAT3(200, addEnemyHpSprite_,0));
+
+		enemyHpSprite_.SpriteTransferVertexBuffer(enemyHpSprite_);
+		enemyHpSprite_.SpriteUpdate(enemyHpSprite_, spriteCommon_);
+	}
+
+	//敵のHPのバーをどんどん増やす処理
+	if (phase1Timer_ >= 100 && phase1Timer_ <= 200)
+	{
+		addEnemyHp1Sprite_ = (phase1Timer_ - 100.0f) * addEnemyHp1SpriteNum_;
+		enemyHp1Sprite_.SetScale(XMFLOAT2(addEnemyHp1Sprite_, 100));
+
+		enemyHp1Sprite_.SpriteTransferVertexBuffer(enemyHp1Sprite_);
+		enemyHp1Sprite_.SpriteUpdate(enemyHp1Sprite_, spriteCommon_);
+	}
 	
+	//200フレーム経ってから更新
+	if (phase1Timer_ >= 200)
+	{
+		//プレイヤーから受け取ったフラグで弾生成
+		if (player_->Attack() == 1)
+		{
+			std::unique_ptr<PlayerBullet> newBullet = std::make_unique<PlayerBullet>();
+			newBullet->Initialize(dxCommon_->GetDevice(), bulletModel_.get(), player_->GetPosition1(),player_->GetRotation(), player_->GetVelocity());
+			playerBullet_.push_back(std::move(newBullet));
+		}
+		//プレイヤーの弾更新
+		for (std::unique_ptr<PlayerBullet>& bullet : playerBullet_)
+		{
+			bullet->Update(matView, matProjection);
+		}
+		//デスフラグの立った弾を削除
+		playerBullet_.remove_if([](std::unique_ptr<PlayerBullet>& bullet)
+			{return bullet->IsDead(); }
+		);
 
-	//プレイヤーから受け取ったフラグで弾生成
-	if (player_->Attack() == 1)
-	{
-		std::unique_ptr<PlayerBullet> newBullet = std::make_unique<PlayerBullet>();
-		newBullet->Initialize(dxCommon_->GetDevice(), bulletModel_.get(), player_->GetPosition(), player_->GetVelocity());
-		playerBullet_.push_back(std::move(newBullet));
+		//敵から受け取ったフラグで弾生成
+		if (enemy_->Attack(player_->GetPosition1()) == 1)
+		{
+			//弾
+			std::unique_ptr<EnemyBullet> newBullet = std::make_unique<EnemyBullet>();
+			newBullet->Initialize(dxCommon_->GetDevice(), enemyBulletModel_.get(), enemy_->GetPosition(),enemy_->GetRotation(), player_->GetPosition1());
+			enemyBullet_.push_back(std::move(newBullet));
+			//煙
+			std::unique_ptr<Smoke> newSmoke = std::make_unique<Smoke>();
+			newSmoke->Initialize(dxCommon_->GetDevice(), starDustModel_.get(), enemy_->GetPosition());
+			enemyBulletSmoke_.push_back(std::move(newSmoke));
+		}
+		//敵の弾更新
+		for (std::unique_ptr<EnemyBullet>& bullet : enemyBullet_)
+		{
+			bullet->Update(matView, matProjection);
+			for (std::unique_ptr<Smoke>& smoke : enemyBulletSmoke_)
+			{
+				smoke->Update(matView, matProjection, bullet->GetPosition(), bullet->GetRotation());
+			}
+		}
+		//デスフラグの立った弾を削除
+		enemyBullet_.remove_if([](std::unique_ptr<EnemyBullet>& bullet)
+			{return bullet->IsDead(); }
+		);
+		//デスフラグの立った煙を削除
+		enemyBulletSmoke_.remove_if([](std::unique_ptr<Smoke>& smoke)
+			{return smoke->IsDead(); }
+		);
 	}
-	//プレイヤーの弾更新
-	for (std::unique_ptr<PlayerBullet>& bullet : playerBullet_)
-	{
-		bullet->Update(matView, matProjection);
-	}
-	//デスフラグの立った弾を削除
-	playerBullet_.remove_if([](std::unique_ptr<PlayerBullet>& bullet)
-		{return bullet->IsDead(); }
-	);
-
-	//敵から受け取ったフラグで弾生成
-	if (enemy_->Attack() == 1)
-	{
-		std::unique_ptr<EnemyBullet> newBullet = std::make_unique<EnemyBullet>();
-		newBullet->Initialize(dxCommon_->GetDevice(), enemyBulletModel_.get(), enemy_->GetPosition(), player_->GetVelocity());
-		enemyBullet_.push_back(std::move(newBullet));
-	}
-	//敵の弾更新
-	for (std::unique_ptr<EnemyBullet>& bullet : enemyBullet_)
-	{
-		bullet->Update(matView, matProjection);
-	}
-	//デスフラグの立った弾を削除
-	enemyBullet_.remove_if([](std::unique_ptr<EnemyBullet>& bullet)
-		{return bullet->IsDead(); }
-	);
 
 	//エフェクト更新
 	for (std::unique_ptr<BreakEffect>& effect : breakEffect_)
@@ -149,7 +322,46 @@ void GameScene::Update()
 	);
 }
 
-void GameScene::Draw()
+void GameScene::Phase1Recollection()
+{
+	Phase1RecollectionTimer_++;
+
+	//カメラ更新
+	camera_->Phase1RecollectionUpdate();;
+	XMMATRIX matView = camera_->GetMatView();
+	XMMATRIX matProjection = camera_->GetMatProjection();
+
+	//星屑更新
+	starDust_->Update(matView, matProjection);
+
+	//敵更新
+	enemy_->Update(matView, matProjection,player_->GetPosition1());
+
+	//540フレームでフェーズ1に移行
+	if (Phase1RecollectionTimer_ > 480)
+	{
+		scene_ = static_cast<size_t>(Scene::Phase1);
+		sceneDraw_ = static_cast<size_t>(SceneDraw::Phase1Draw);
+		//タイマーリセット
+		camera_->phase1RecollectionTimerReset();
+		Phase1RecollectionTimerReset();
+	}
+}
+
+void GameScene::TitleDraw()
+{
+	//スプライト共通コマンド
+	sprite_->SpriteCommonBeginDraw(dxCommon_->GetCommandList(), spriteCommon_);
+
+	titleSprite_.SpriteDraw(dxCommon_->GetCommandList(), titleSprite_, spriteCommon_, dxCommon_->GetDevice());
+	operationSprite_.SpriteDraw(dxCommon_->GetCommandList(), operationSprite_, spriteCommon_, dxCommon_->GetDevice());
+
+	starDust_->Draw(dxCommon_->GetCommandList());
+	player_->Draw(dxCommon_->GetCommandList());
+	smoke_->Draw(dxCommon_->GetCommandList());
+}
+
+void GameScene::Phase1Draw()
 {
 	starDust_->Draw(dxCommon_->GetCommandList());
 	player_->Draw(dxCommon_->GetCommandList());
@@ -160,15 +372,37 @@ void GameScene::Draw()
 	{
 		bullet->Draw(dxCommon_->GetCommandList());
 	}
+	//敵の弾
 	for (std::unique_ptr<EnemyBullet>& bullet : enemyBullet_)
 	{
 		bullet->Draw(dxCommon_->GetCommandList());
+	}
+	//敵の弾
+	for (std::unique_ptr<Smoke>& smoke : enemyBulletSmoke_)
+	{
+		smoke->Draw(dxCommon_->GetCommandList());
 	}
 	//爆発エフェクト描画
 	for (std::unique_ptr<BreakEffect>& effect : breakEffect_)
 	{
 		effect->Draw(dxCommon_->GetCommandList());
 	}
+
+	//スプライト共通コマンド
+	sprite_->SpriteCommonBeginDraw(dxCommon_->GetCommandList(), spriteCommon_);
+
+	//スプライト描画
+	enemyHpSprite_.SpriteDraw(dxCommon_->GetCommandList(), enemyHpSprite_, spriteCommon_, dxCommon_->GetDevice());
+	enemyHp1Sprite_.SpriteDraw(dxCommon_->GetCommandList(), enemyHp1Sprite_, spriteCommon_, dxCommon_->GetDevice());
+}
+
+void GameScene::Phase1RecollectionDraw()
+{
+	//スプライト共通コマンド
+	sprite_->SpriteCommonBeginDraw(dxCommon_->GetCommandList(), spriteCommon_);
+
+	starDust_->Draw(dxCommon_->GetCommandList());
+	enemy_->Draw(dxCommon_->GetCommandList());
 }
 
 void GameScene::EnmeyCollition()
@@ -179,7 +413,7 @@ void GameScene::EnmeyCollition()
 		float x = bullet->GetPosition().x - enemy_->GetPosition().x;
 		float y = bullet->GetPosition().y - enemy_->GetPosition().y;
 		float z = bullet->GetPosition().z - enemy_->GetPosition().z;
-		if ((x * x) + (y * y) + (z * z) <= 100)
+		if ((x * x) + (y * y) + (z * z) <= 2000)
 		{
 			std::unique_ptr<BreakEffect> newEffect = std::make_unique<BreakEffect>();
 			newEffect->Initialize(dxCommon_->GetDevice(), starDustModel_.get(), bullet->GetPosition());
@@ -192,12 +426,12 @@ void GameScene::EnmeyCollition()
 
 void GameScene::PlayerCollition()
 {
-	//敵に弾が当たったら弾消滅 爆発エフェクト作成
+	//自機に弾が当たったら弾消滅 爆発エフェクト作成
 	for (std::unique_ptr<EnemyBullet>& bullet : enemyBullet_)
 	{
-		float x = bullet->GetPosition().x - player_->GetPosition().x;
-		float y = bullet->GetPosition().y - player_->GetPosition().y;
-		float z = bullet->GetPosition().z - player_->GetPosition().z;
+		float x = bullet->GetPosition().x - player_->GetPosition1().x;
+		float y = bullet->GetPosition().y - player_->GetPosition1().y;
+		float z = bullet->GetPosition().z - player_->GetPosition1().z;
 		if ((x * x) + (y * y) + (z * z) <= 25)
 		{
 			std::unique_ptr<BreakEffect> newEffect = std::make_unique<BreakEffect>();
@@ -205,6 +439,25 @@ void GameScene::PlayerCollition()
 			breakEffect_.push_back(std::move(newEffect));
 
 			bullet->SetIsDeadTrue();
+			for (std::unique_ptr<Smoke>& smoke : enemyBulletSmoke_)
+			{
+				smoke->SetIsDeadTrue();
+			}
 		}
 	}
 }
+
+//メンバ関数のポインタテーブル
+void (GameScene::* GameScene::Scene_[])() =
+{
+	&GameScene::Title,
+	&GameScene::Phase1Recollection,
+	&GameScene::Phase1
+};
+
+void (GameScene::* GameScene::SceneDraw_[])() =
+{
+	&GameScene::TitleDraw,
+	& GameScene::Phase1RecollectionDraw,
+	&GameScene::Phase1Draw
+};

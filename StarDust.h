@@ -23,9 +23,9 @@ private:
 	Model* model_;
 
 	//¯‹û‚Ì”
-	int starDustNum = 1000;
+	int starDustNum = 300;
 	//¯‹û‚Ì‘å‚«‚³
-	float starDustScale = 0.2;
+	float starDustScale = 0.4;
 
 	std::list<std::unique_ptr<Object3D>> object3Ds_;
 

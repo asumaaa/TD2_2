@@ -13,6 +13,8 @@ public:
 	void Initialize(ID3D12Device* device, Model* model,XMFLOAT3 position);
 	void Update(XMMATRIX& matView, XMMATRIX& matProjection, XMFLOAT3 position, XMFLOAT3 rotation);
 	void Draw(ID3D12GraphicsCommandList* cmdList);
+	bool IsDead()const { return isDead_; }
+	void SetIsDeadTrue() { isDead_ = true; };
 private:
 	/*DirectXCommon* dx_;*/
 	ID3D12Device* device_;
@@ -37,5 +39,12 @@ private:
 
 	//煙を発生させるモデルと煙の中心からの距離
 	float length_ = 7;
+
+	//寿命
+	static const int32_t lifeTime = 60 * 5;
+	//デスタイマー
+	int32_t deathTimer_ = lifeTime;
+	//デスフラグ
+	bool isDead_ = false;
 };
 

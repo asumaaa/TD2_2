@@ -28,9 +28,9 @@ void StarDust::Initialize(ID3D12Device* device, Model* model)
 	//èâä˙ílê›íË
 	for (int i = 0; i < starDustNum; i++)
 	{
-		position_[i].x = static_cast<float>(rand() % 800 - 400);
-		position_[i].y = static_cast<float>(rand() % 800 - 400);
-		position_[i].z = static_cast<float>(rand() % 800 - 400);
+		position_[i].x = static_cast<float>(rand() % 2000 - 1000);
+		position_[i].y = static_cast<float>(rand() % 2000 - 1000);
+		position_[i].z = static_cast<float>(rand() % 2000 - 1000);
 		scale_[i] = { starDustScale,starDustScale,starDustScale };
 		rotation_[i] = { 0.0f,0.0f,0.0f };
 	}

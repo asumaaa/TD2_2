@@ -10,7 +10,7 @@ public:
 	EnemyBullet* GetInstance();
 	EnemyBullet();
 	~EnemyBullet();
-	void Initialize(ID3D12Device* device, Model* model, const XMFLOAT3& position, const XMFLOAT3& velocity);
+	void Initialize(ID3D12Device* device, Model* model, const XMFLOAT3& enemyPosition, const XMFLOAT3& enemyRotation, const XMFLOAT3& playerPosition);
 	void Update(XMMATRIX& matView, XMMATRIX& matProjection);
 	void Move();
 	void OnCollision();
@@ -26,7 +26,7 @@ private:
 	Model* model_ = nullptr;
 	std::unique_ptr<Object3D> object3d_;
 	//アフィン変換情報
-	XMFLOAT3 scale_ = { 1,1,1 };
+	XMFLOAT3 scale_ = { 3,3,3 };
 	XMFLOAT3 rotation_ = { 0,0,0 };
 	XMFLOAT3 position_ = { 0,0,0 };
 
@@ -40,4 +40,7 @@ private:
 	int32_t deathTimer_ = lifeTime;
 	//デスフラグ
 	bool isDead_ = false;
+
+	//プレイヤーの位置
+	XMFLOAT3 playerPosition_;
 };

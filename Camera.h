@@ -18,8 +18,12 @@ public:
 	void Initialize(Input* input, DXInput* dxInput,Player* player);
 	//更新
 	void Update();
+	void TitleUpdate();	//タイトルのカメラの処理
+	void MoveToGameUpdate();	//タイトルのカメラの処理
+	void Phase1RecollectionUpdate();	//フェーズ1のゲーム始まる前の処理
 	//プレイヤーの後ろをつける挙動
 	void homind();
+	void TitleHomind();
 	//ゲッターセッター
 	void SetTarget(XMFLOAT3 pos);
 	void SetEye(XMFLOAT3 pos);
@@ -44,8 +48,18 @@ private:
 	//プレイヤーの後ろをつける挙動
 	//プレイヤーとカメラの距離
 	float length_ = 40.0f;
+	float titleLength_ = 30.0f;
 	//入力によって加算させる変数
 	float lengthX_ = 0.0f;
 	float lengthZ_ = 0.0f;
+
+	//シーン用
+	//ゲームに移る時のタイマー
+	float moveToGameTimer_ = 0;
+
+	//フェーズ1のゲーム始まる前のタイマー
+	float phase1RecollectionTimer_ = 0;
+public:
+	void phase1RecollectionTimerReset() { phase1RecollectionTimer_ = 0; };
 };
 

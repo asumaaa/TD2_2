@@ -2,6 +2,7 @@
 #include "Model.h"
 #include "Object3D.h"
 #include "DirectXCommon.h"
+#define PI 3.14159265359
 
 class Enemy
 {
@@ -11,8 +12,8 @@ public:
 	Enemy();
 	~Enemy();
 	void Initialize(ID3D12Device* device, Model* model);
-	void Update(XMMATRIX& matView, XMMATRIX& matProjection);
-	bool Attack();
+	void Update(XMMATRIX& matView, XMMATRIX& matProjection,XMFLOAT3 playerPosition);
+	bool Attack(XMFLOAT3 playerPosition);
 	void Move();
 	void Draw(ID3D12GraphicsCommandList* cmdList);
 	//ゲッター　セッター　
@@ -32,7 +33,15 @@ private:
 	XMFLOAT3 rotation_ = { 0,0,0 };
 	XMFLOAT3 position_ = { 0,0,0 };
 
-	//弾のタイマー
+	//phase1の弾のタイマー
+	int phase1Timer1_ = 0;
+	int phase1Timer2_ = 0;
+	bool phase1Flag = false;
+	//プレイヤーの位置を保存しておく用の変数
+	XMFLOAT3 playerPosition_;
+	float addRotation_;
+
+	//弾のタイマ-
 	int bulletTimer_ = 0;
 
 	//体力

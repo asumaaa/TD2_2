@@ -15,7 +15,7 @@ PlayerBullet::~PlayerBullet()
 {
 }
 
-void PlayerBullet::Initialize(ID3D12Device* device, Model* model, const XMFLOAT3& position, const XMFLOAT3& velocity)
+void PlayerBullet::Initialize(ID3D12Device* device, Model* model, const XMFLOAT3& position, const XMFLOAT3& rotation, const XMFLOAT3& velocity)
 {
 	assert(model);
 
@@ -23,6 +23,7 @@ void PlayerBullet::Initialize(ID3D12Device* device, Model* model, const XMFLOAT3
 	this->device_ = device;
 	this->model_ = model;
 	this->position_ = position;
+	this->rotation_ = rotation;
 	this->velocity_ = velocity;
 
 	Object3D* newObject = new Object3D();

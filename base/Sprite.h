@@ -16,6 +16,7 @@ using namespace Microsoft::WRL;
 
 #include <DirectXTex.h>
 
+#include "DirectXCommon.h"
 
 struct PipelineSet {
 
@@ -87,6 +88,12 @@ private:
 		XMMATRIX mat; //座標
 	};
 
+	//コマンドリスト
+	ComPtr<ID3D12GraphicsCommandList> cmdList;
+	DirectXCommon* dx = nullptr;
+	ComPtr<ID3D12DescriptorHeap> descHeap;
+	D3D12_DESCRIPTOR_HEAP_DESC srvHeapDesc = {};
+
 public:
 
 	//スプライト生成
@@ -96,11 +103,11 @@ public:
 	SpriteCommon SpriteCommonCreate(ID3D12Device* dev, int window_width, int window_height);
 
 	//スプライト共通グラフィックスコマンドのセット
-	void SpriteCommonBeginDraw(ID3D12GraphicsCommandList* cmdList, const SpriteCommon& spriteCommon, ID3D12DescriptorHeap* descHeap);
+	void SpriteCommonBeginDraw(ID3D12GraphicsCommandList* cmdList, const SpriteCommon& spriteCommon);
 
 	//スプライト単体描画
 
-	void SpriteDraw(const Sprite& sprite, ID3D12GraphicsCommandList* cmdList, const SpriteCommon& spriteCommon, ID3D12Device* dev);
+	void SpriteDraw(ID3D12GraphicsCommandList* cmdList, const Sprite& sprite, const SpriteCommon& spriteCommon, ID3D12Device* dev);
 
 	//スプライト単体更新
 	void SpriteUpdate(Sprite& sprite, const SpriteCommon& spriteCommon);
@@ -112,10 +119,12 @@ public:
 	void SpriteTransferVertexBuffer(const Sprite& sprite);
 
 	//セッター
-	void SetTexNumber(UINT texnumber) {this->texNumber = texnumber;}
+	void SetTexNumber(UINT texnumber) { this->texNumber = texnumber; }
 
 	void SetPosition(XMFLOAT3 position) { this->position = position; }
 	void SetScale(XMFLOAT2 scale) { this->size = scale; }
 
+
+	void Release();
 };
 

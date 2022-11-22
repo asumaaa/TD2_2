@@ -9,7 +9,7 @@ PipelineSet Sprite::SpriteCreateGraphicsPipeline(ID3D12Device* dev) {
 
 	// 頂点シェーダの読み込みとコンパイル
 	result = D3DCompileFromFile(
-		L"Resources/shaders/SpriteVS.hlsl", // シェーダファイル名
+		L"SpriteVS.hlsl", // シェーダファイル名
 		nullptr,
 		D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
 		"main", "vs_5_0", // エントリーポイント名、シェーダーモデル指定
@@ -34,7 +34,7 @@ PipelineSet Sprite::SpriteCreateGraphicsPipeline(ID3D12Device* dev) {
 
 	// ピクセルシェーダの読み込みとコンパイル
 	result = D3DCompileFromFile(
-		L"Resources/shaders/SpritePS.hlsl",   // シェーダファイル名
+		L"SpritePS.hlsl",   // シェーダファイル名
 		nullptr,
 		D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
 		"main", "ps_5_0", // エントリーポイント名、シェーダーモデル指定
@@ -201,6 +201,15 @@ PipelineSet Sprite::SpriteCreateGraphicsPipeline(ID3D12Device* dev) {
 	result = dev->CreateGraphicsPipelineState(&pipelineDesc, IID_PPV_ARGS(&pipelineSet.pipelinestate));
 	assert(SUCCEEDED(result));
 
+	// デスクリプタヒープを生成	
+	D3D12_DESCRIPTOR_HEAP_DESC descHeapDesc = {};
+	descHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+	descHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;//シェーダから見えるように
+	descHeapDesc.NumDescriptors = 1; // シェーダーリソースビュー1つ
+	result = dev->CreateDescriptorHeap(&descHeapDesc, IID_PPV_ARGS(&descHeap));//生成
+	if (FAILED(result)) {
+		assert(0);
+	}
 
 	//パイプラインとルートシグネチャを返す
 	return pipelineSet;
@@ -285,7 +294,7 @@ Sprite Sprite::SpriteCreate(ID3D12Device* dev, int window_width, int window_heig
 	return sprite;
 }
 //スプライト共通グラフィックスコマンドのセット
-void Sprite::SpriteCommonBeginDraw(ID3D12GraphicsCommandList* cmdList, const SpriteCommon& spriteCommon, ID3D12DescriptorHeap* descHeap) {
+void Sprite::SpriteCommonBeginDraw(ID3D12GraphicsCommandList* cmdList, const SpriteCommon& spriteCommon) {
 
 	// パイプラインステートとルートシグネチャの設定コマンド
 	cmdList->SetPipelineState(spriteCommon.pipelineSet.pipelinestate.Get());
@@ -301,7 +310,9 @@ void Sprite::SpriteCommonBeginDraw(ID3D12GraphicsCommandList* cmdList, const Spr
 
 //スプライト単体描画
 
-void Sprite::SpriteDraw(const Sprite& sprite, ID3D12GraphicsCommandList* cmdList, const SpriteCommon& spriteCommon, ID3D12Device* dev) {
+void Sprite::SpriteDraw(ID3D12GraphicsCommandList* cmdList, const Sprite& sprite, const SpriteCommon& spriteCommon, ID3D12Device* dev) {
+
+	//this->cmmandList = dx->GetCommandList();
 
 	// 頂点バッファの設定コマンド
 	cmdList->IASetVertexBuffers(0, 1, &sprite.vbView);
@@ -453,5 +464,10 @@ void Sprite::SpriteTransferVertexBuffer(const Sprite& sprite) {
 	result = sprite.vertBuff->Map(0, nullptr, (void**)&vertMap);
 	memcpy(vertMap, vertices, sizeof(vertices));
 	sprite.vertBuff->Unmap(0, nullptr);
+}
+
+void Sprite::Release()
+{
+	delete dx;
 }
 
