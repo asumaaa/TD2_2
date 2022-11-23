@@ -37,7 +37,6 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 	newBulletModel->Initialize(dxCommon_->GetDevice(), "bullet", "Resources/bullet.png");
 	bulletModel_.reset(newBulletModel);
 
-
 	//敵の弾のモデルの初期化
 	Model* newEnemyBulletModel = new Model();
 	newEnemyBulletModel->Initialize(dxCommon_->GetDevice(), "enemyBullet", "Resources/enemyBullet.png");
@@ -53,7 +52,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 	newPlayer->Initialize(dxCommon_->GetDevice(), playerModel_.get(),dxInput);
 	player_.reset(newPlayer);
 	//座標をセット
-	player_->SetPhase1();
+	player_->SetTitle();
 
 	//プレイヤーの煙初期化
 	Smoke* newSmoke = new Smoke();
@@ -70,42 +69,97 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 	newStarDust->Initialize(dxCommon_->GetDevice(), starDustModel_.get());
 	starDust_.reset(newStarDust);
 
+	//プレイヤーの煙初期化
+	for (int i = 0; i < 4; i++)
+	{
+		Smoke2* newSmoke2 = new Smoke2();
+		if (i == 0)newSmoke2->Initialize(dxCommon_->GetDevice(), starDustModel_.get(), XMFLOAT3(25, 25, 0));
+		if (i == 1)newSmoke2->Initialize(dxCommon_->GetDevice(), starDustModel_.get(), XMFLOAT3(-15, 15, 0));
+		if (i == 2)newSmoke2->Initialize(dxCommon_->GetDevice(), starDustModel_.get(), XMFLOAT3(0, 25, 0));
+		if(i == 3)newSmoke2->Initialize(dxCommon_->GetDevice(), starDustModel_.get(), XMFLOAT3(-25, -25, 0));
+		enemySmoke2_[i].reset(newSmoke2);
+	}
+
 	//スプライト初期化
 	spriteCommon_ = sprite_->SpriteCommonCreate(dxCommon_->GetDevice(), 1280, 720);
 	sprite_->SpriteCommonLoadTexture(spriteCommon_, 0, L"Resources/title.png", dxCommon_->GetDevice());
 	sprite_->SpriteCommonLoadTexture(spriteCommon_, 1, L"Resources/operation.png", dxCommon_->GetDevice());
 	sprite_->SpriteCommonLoadTexture(spriteCommon_, 2, L"Resources/operation1.png", dxCommon_->GetDevice());
-	sprite_->SpriteCommonLoadTexture(spriteCommon_, 3, L"Resources/operation2.png", dxCommon_->GetDevice());
-	sprite_->SpriteCommonLoadTexture(spriteCommon_, 4, L"Resources/playerHp.png", dxCommon_->GetDevice());
-	sprite_->SpriteCommonLoadTexture(spriteCommon_, 5, L"Resources/enemyHp.png", dxCommon_->GetDevice());
-	sprite_->SpriteCommonLoadTexture(spriteCommon_, 6, L"Resources/enemyHp1.png", dxCommon_->GetDevice());
-	titleSprite_ = titleSprite_.SpriteCreate(dxCommon_->GetDevice(), 1280, 720);
-	operationSprite_ = operationSprite_.SpriteCreate(dxCommon_->GetDevice(), 1280, 720);	//oparation.png
-	operation1Sprite_ = operation1Sprite_.SpriteCreate(dxCommon_->GetDevice(), 1280, 720);	//oparation1.png
-	operation2Sprite_ = operation2Sprite_.SpriteCreate(dxCommon_->GetDevice(), 1280, 720);	//oparation2.png
-	playerHpSprite_ = playerHpSprite_.SpriteCreate(dxCommon_->GetDevice(), 1280, 720);	//playerHp.png
-	enemyHpSprite_ = enemyHpSprite_.SpriteCreate(dxCommon_->GetDevice(), 1280, 720);	//playerHp.png
-	enemyHp1Sprite_ = enemyHp1Sprite_.SpriteCreate(dxCommon_->GetDevice(), 1280, 720);	//enemyHp.png
+	sprite_->SpriteCommonLoadTexture(spriteCommon_, 3, L"Resources/Sprite-0005.png", dxCommon_->GetDevice());
+	sprite_->SpriteCommonLoadTexture(spriteCommon_, 4, L"Resources/operation91.png", dxCommon_->GetDevice());
+	sprite_->SpriteCommonLoadTexture(spriteCommon_, 5, L"Resources/playerHp.png", dxCommon_->GetDevice());
+	sprite_->SpriteCommonLoadTexture(spriteCommon_, 6, L"Resources/enemyHp.png", dxCommon_->GetDevice());
+	sprite_->SpriteCommonLoadTexture(spriteCommon_, 7, L"Resources/enemyHp1.png", dxCommon_->GetDevice());
+	sprite_->SpriteCommonLoadTexture(spriteCommon_, 8, L"Resources/curtain.png", dxCommon_->GetDevice());
+	sprite_->SpriteCommonLoadTexture(spriteCommon_, 9, L"Resources/gameclear.png", dxCommon_->GetDevice());
+	sprite_->SpriteCommonLoadTexture(spriteCommon_, 10, L"Resources/gameover.png", dxCommon_->GetDevice());
+	titleSprite_.SpriteCreate(dxCommon_->GetDevice(), 1280, 720);
+	operationSprite_.SpriteCreate(dxCommon_->GetDevice(), 1280, 720);	//oparation.png
+	operation1Sprite_.SpriteCreate(dxCommon_->GetDevice(), 1280, 720);	//oparation1.png
+	operation2Sprite_.SpriteCreate(dxCommon_->GetDevice(), 1280, 720);	//oparation2.png
+	operation3Sprite_.SpriteCreate(dxCommon_->GetDevice(), 1280, 720);	//oparation3.png
+	//playerHp.png
+	for (int i = 0; i < 5; i++)
+	{
+		playerHpSprite_[i].SpriteCreate(dxCommon_->GetDevice(), 1280, 720);
+		playerHpSprite_[i].SetTexNumber(5);
+	}
+	enemyHpSprite_.SpriteCreate(dxCommon_->GetDevice(), 1280, 720);	//playerHp.png
+	enemyHp1Sprite_.SpriteCreate(dxCommon_->GetDevice(), 1280, 720);	//enemyHp.png
 	//テクスチャ番号セット
 	titleSprite_.SetTexNumber(0);
 	operationSprite_.SetTexNumber(1);	//oparation.png
 	operation1Sprite_.SetTexNumber(2);	//oparation1.png
 	operation2Sprite_.SetTexNumber(3);	//oparation2.png
-	playerHpSprite_.SetTexNumber(4);	//playerHp.png
-	enemyHpSprite_.SetTexNumber(5);	//playerHp.png
-	enemyHp1Sprite_.SetTexNumber(6);	//enemyHp.png
+	operation3Sprite_.SetTexNumber(4);	//oparation3.png
+	enemyHpSprite_.SetTexNumber(6);	//playerHp.png
+	enemyHp1Sprite_.SetTexNumber(7);	//enemyHp.png
+	for (int i = 0; i < 2; i++)
+	{
+		curtainSprite_[i].SpriteCreate(dxCommon_->GetDevice(), 1280, 720);
+		curtainSprite_[i].SetTexNumber(8);
+		curtainSprite_[i].SetScale(XMFLOAT2(1280, 120));
+		curtainSprite_[0].SetPosition(XMFLOAT3(0, 0, 0));
+		curtainSprite_[1].SetPosition(XMFLOAT3(0, 620, 0));
+		curtainSprite_[i].SpriteTransferVertexBuffer(curtainSprite_[i]);
+		curtainSprite_[i].SpriteUpdate(curtainSprite_[i], spriteCommon_);
+	}
+	gameClearSprite_.SpriteCreate(dxCommon_->GetDevice(), 1280, 720);
+	gameClearSprite_.SetTexNumber(9);
+	gameClearSprite_.SetPosition(XMFLOAT3(200, -150, 0));
+	gameClearSprite_.SetScale(XMFLOAT2(387 * 2.2, 62 * 2.2));
+	gameClearSprite_.SpriteTransferVertexBuffer(gameClearSprite_);
+	gameClearSprite_.SpriteUpdate(gameClearSprite_, spriteCommon_);
+	gameOverSprite_.SpriteCreate(dxCommon_->GetDevice(), 1280, 720);
+	gameOverSprite_.SetTexNumber(10);
+	gameOverSprite_.SetPosition(XMFLOAT3(200, -150, 0));
+	gameOverSprite_.SetScale(XMFLOAT2(387 * 2.2, 62 * 2.2));
+	gameOverSprite_.SpriteTransferVertexBuffer(gameOverSprite_);
+	gameOverSprite_.SpriteUpdate(gameOverSprite_, spriteCommon_);
 	//テクスチャサイズ設定
 	//タイトル
-	titleSprite_.SetScale(XMFLOAT2(1280, 200));
+	titleSprite_.SetPosition(XMFLOAT3(200, 100, 0));
+	titleSprite_.SetScale(XMFLOAT2(414 * 2.2, 54 * 2.2));
 	//操作
 	operationSprite_.SetScale(XMFLOAT2(600, 80));
 	operationSprite_.SetPosition(XMFLOAT3(350,600,0));
 	//操作1
-	operation1Sprite_.SetScale(XMFLOAT2(1280, 200));
+	operation1Sprite_.SetScale(XMFLOAT2(680 / 2, 80 / 2));
+	operation1Sprite_.SetPosition(XMFLOAT3(900, 550 + 200,0));
 	//操作2
-	operation2Sprite_.SetScale(XMFLOAT2(1280, 200));
+	operation2Sprite_.SetScale(XMFLOAT2(680 / 2, 80 / 2));
+	operation2Sprite_.SetPosition(XMFLOAT3(900, 600 + 200,0));
+	//操作3
+	operation3Sprite_.SetScale(XMFLOAT2(680 / 2, 80 / 2));
+	operation3Sprite_.SetPosition(XMFLOAT3(900, 650 + 200,0));
 	//プレイヤーのHP
-	playerHpSprite_.SetScale(XMFLOAT2(1280, 200));
+	for (int i = 0; i < 5; i++)
+	{
+		playerHpSprite_[i].SetScale(XMFLOAT2(80, 80));
+		playerHpSprite_[i].SetPosition(XMFLOAT3(0, -720,0));
+		playerHpSprite_[i].SpriteTransferVertexBuffer(playerHpSprite_[i]);
+		playerHpSprite_[i].SpriteUpdate(playerHpSprite_[i], spriteCommon_);
+	}
 	//敵のHP1
 	enemyHpSprite_.SetScale(XMFLOAT2(820, 100));
 	enemyHpSprite_.SetPosition(XMFLOAT3(200, -90,0));
@@ -126,9 +180,9 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 	//操作2
 	operation2Sprite_.SpriteTransferVertexBuffer(operation2Sprite_);
 	operation2Sprite_.SpriteUpdate(operation2Sprite_, spriteCommon_);
-	//プレイヤーのHP
-	playerHpSprite_.SpriteTransferVertexBuffer(playerHpSprite_);
-	playerHpSprite_.SpriteUpdate(playerHpSprite_, spriteCommon_);
+	//操作3
+	operation3Sprite_.SpriteTransferVertexBuffer(operation3Sprite_);
+	operation3Sprite_.SpriteUpdate(operation3Sprite_, spriteCommon_);
 	//敵のHP1
 	enemyHpSprite_.SpriteTransferVertexBuffer(enemyHpSprite_);
 	enemyHpSprite_.SpriteUpdate(enemyHpSprite_, spriteCommon_);
@@ -141,6 +195,184 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 	//カメラ初期化
 	Camera* newCamera = new Camera();
 	newCamera->Initialize(input_,dxInput, player_.get());
+	camera_.reset(newCamera);
+}
+
+void GameScene::Initialize()
+{
+	////プレイヤーのモデル初期化
+	//Model* newModel = new Model();
+	//newModel->Initialize(dxCommon_->GetDevice(), "fighter", "Resources/fighter.png");
+	//playerModel_.reset(newModel);
+
+	////敵のモデル初期化
+	//Model* newEnemyModel = new Model();
+	//newEnemyModel->Initialize(dxCommon_->GetDevice(), "boss", "Resources/boss.png");
+	//enemyModel_.reset(newEnemyModel);
+
+	////弾のモデルの初期化
+	//Model* newBulletModel = new Model();
+	//newBulletModel->Initialize(dxCommon_->GetDevice(), "bullet", "Resources/bullet.png");
+	//bulletModel_.reset(newBulletModel);
+
+	////敵の弾のモデルの初期化
+	//Model* newEnemyBulletModel = new Model();
+	//newEnemyBulletModel->Initialize(dxCommon_->GetDevice(), "enemyBullet", "Resources/enemyBullet.png");
+	//enemyBulletModel_.reset(newEnemyBulletModel);
+
+	////星屑のモデルの初期化
+	//Model* newStarModel = new Model();
+	//newStarModel->Initialize(dxCommon_->GetDevice(), "star", "Resources/star.png");
+	//starDustModel_.reset(newStarModel);
+
+	////プレイヤー初期化
+	//Player* newPlayer = new Player();
+	//newPlayer->Initialize(dxCommon_->GetDevice(), playerModel_.get(), dxInput);
+	//player_.reset(newPlayer);
+	////座標をセット
+	//player_->SetTitle();
+
+	////プレイヤーの煙初期化
+	//Smoke* newSmoke = new Smoke();
+	//newSmoke->Initialize(dxCommon_->GetDevice(), starDustModel_.get(), player_->GetPosition1());
+	//smoke_.reset(newSmoke);
+
+	////敵初期化
+	//Enemy* newEnemy = new Enemy();
+	//newEnemy->Initialize(dxCommon_->GetDevice(), enemyModel_.get());
+	//enemy_.reset(newEnemy);
+
+	////星屑初期化
+	//StarDust* newStarDust = new StarDust();
+	//newStarDust->Initialize(dxCommon_->GetDevice(), starDustModel_.get());
+	//starDust_.reset(newStarDust);
+
+	//プレイヤーの煙初期化
+	for (int i = 0; i < 4; i++)
+	{
+		Smoke2* newSmoke2 = new Smoke2();
+		if (i == 0)newSmoke2->Initialize(dxCommon_->GetDevice(), starDustModel_.get(), XMFLOAT3(25, 25, 0));
+		if (i == 1)newSmoke2->Initialize(dxCommon_->GetDevice(), starDustModel_.get(), XMFLOAT3(-15, 15, 0));
+		if (i == 2)newSmoke2->Initialize(dxCommon_->GetDevice(), starDustModel_.get(), XMFLOAT3(0, 25, 0));
+		if (i == 3)newSmoke2->Initialize(dxCommon_->GetDevice(), starDustModel_.get(), XMFLOAT3(-25, -25, 0));
+		enemySmoke2_[i].reset(newSmoke2);
+	}
+
+	//スプライト初期化
+	spriteCommon_ = sprite_->SpriteCommonCreate(dxCommon_->GetDevice(), 1280, 720);
+	sprite_->SpriteCommonLoadTexture(spriteCommon_, 0, L"Resources/title.png", dxCommon_->GetDevice());
+	sprite_->SpriteCommonLoadTexture(spriteCommon_, 1, L"Resources/operation.png", dxCommon_->GetDevice());
+	sprite_->SpriteCommonLoadTexture(spriteCommon_, 2, L"Resources/operation1.png", dxCommon_->GetDevice());
+	sprite_->SpriteCommonLoadTexture(spriteCommon_, 3, L"Resources/Sprite-0005.png", dxCommon_->GetDevice());
+	sprite_->SpriteCommonLoadTexture(spriteCommon_, 4, L"Resources/operation91.png", dxCommon_->GetDevice());
+	sprite_->SpriteCommonLoadTexture(spriteCommon_, 5, L"Resources/playerHp.png", dxCommon_->GetDevice());
+	sprite_->SpriteCommonLoadTexture(spriteCommon_, 6, L"Resources/enemyHp.png", dxCommon_->GetDevice());
+	sprite_->SpriteCommonLoadTexture(spriteCommon_, 7, L"Resources/enemyHp1.png", dxCommon_->GetDevice());
+	sprite_->SpriteCommonLoadTexture(spriteCommon_, 8, L"Resources/curtain.png", dxCommon_->GetDevice());
+	sprite_->SpriteCommonLoadTexture(spriteCommon_, 9, L"Resources/gameclear.png", dxCommon_->GetDevice());
+	sprite_->SpriteCommonLoadTexture(spriteCommon_, 10, L"Resources/gameover.png", dxCommon_->GetDevice());
+	titleSprite_.SpriteCreate(dxCommon_->GetDevice(), 1280, 720);
+	operationSprite_.SpriteCreate(dxCommon_->GetDevice(), 1280, 720);	//oparation.png
+	operation1Sprite_.SpriteCreate(dxCommon_->GetDevice(), 1280, 720);	//oparation1.png
+	operation2Sprite_.SpriteCreate(dxCommon_->GetDevice(), 1280, 720);	//oparation2.png
+	operation3Sprite_.SpriteCreate(dxCommon_->GetDevice(), 1280, 720);	//oparation3.png
+	//playerHp.png
+	for (int i = 0; i < 5; i++)
+	{
+		playerHpSprite_[i].SpriteCreate(dxCommon_->GetDevice(), 1280, 720);
+		playerHpSprite_[i].SetTexNumber(5);
+	}
+	enemyHpSprite_.SpriteCreate(dxCommon_->GetDevice(), 1280, 720);	//playerHp.png
+	enemyHp1Sprite_.SpriteCreate(dxCommon_->GetDevice(), 1280, 720);	//enemyHp.png
+	//テクスチャ番号セット
+	titleSprite_.SetTexNumber(0);
+	operationSprite_.SetTexNumber(1);	//oparation.png
+	operation1Sprite_.SetTexNumber(2);	//oparation1.png
+	operation2Sprite_.SetTexNumber(3);	//oparation2.png
+	operation3Sprite_.SetTexNumber(4);	//oparation3.png
+	enemyHpSprite_.SetTexNumber(6);	//playerHp.png
+	enemyHp1Sprite_.SetTexNumber(7);	//enemyHp.png
+	for (int i = 0; i < 2; i++)
+	{
+		curtainSprite_[i].SpriteCreate(dxCommon_->GetDevice(), 1280, 720);
+		curtainSprite_[i].SetTexNumber(8);
+		curtainSprite_[i].SetScale(XMFLOAT2(1280, 120));
+		curtainSprite_[0].SetPosition(XMFLOAT3(0, 0, 0));
+		curtainSprite_[1].SetPosition(XMFLOAT3(0, 620, 0));
+		curtainSprite_[i].SpriteTransferVertexBuffer(curtainSprite_[i]);
+		curtainSprite_[i].SpriteUpdate(curtainSprite_[i], spriteCommon_);
+	}
+	gameClearSprite_.SpriteCreate(dxCommon_->GetDevice(), 1280, 720);
+	gameClearSprite_.SetTexNumber(9);
+	gameClearSprite_.SetPosition(XMFLOAT3(200, -150, 0));
+	gameClearSprite_.SetScale(XMFLOAT2(387 * 2.2, 62 * 2.2));
+	gameClearSprite_.SpriteTransferVertexBuffer(gameClearSprite_);
+	gameClearSprite_.SpriteUpdate(gameClearSprite_, spriteCommon_);
+	gameOverSprite_.SpriteCreate(dxCommon_->GetDevice(), 1280, 720);
+	gameOverSprite_.SetTexNumber(10);
+	gameOverSprite_.SetPosition(XMFLOAT3(200, -150, 0));
+	gameOverSprite_.SetScale(XMFLOAT2(387 * 2.2, 62 * 2.2));
+	gameOverSprite_.SpriteTransferVertexBuffer(gameOverSprite_);
+	gameOverSprite_.SpriteUpdate(gameOverSprite_, spriteCommon_);
+	//テクスチャサイズ設定
+	//タイトル
+	titleSprite_.SetPosition(XMFLOAT3(200, 100, 0));
+	titleSprite_.SetScale(XMFLOAT2(414 * 2.2, 54 * 2.2));
+	//操作
+	operationSprite_.SetScale(XMFLOAT2(600, 80));
+	operationSprite_.SetPosition(XMFLOAT3(350, 600, 0));
+	//操作1
+	operation1Sprite_.SetScale(XMFLOAT2(680 / 2, 80 / 2));
+	operation1Sprite_.SetPosition(XMFLOAT3(900, 550 + 200, 0));
+	//操作2
+	operation2Sprite_.SetScale(XMFLOAT2(680 / 2, 80 / 2));
+	operation2Sprite_.SetPosition(XMFLOAT3(900, 600 + 200, 0));
+	//操作3
+	operation3Sprite_.SetScale(XMFLOAT2(680 / 2, 80 / 2));
+	operation3Sprite_.SetPosition(XMFLOAT3(900, 650 + 200, 0));
+	//プレイヤーのHP
+	for (int i = 0; i < 5; i++)
+	{
+		playerHpSprite_[i].SetScale(XMFLOAT2(80, 80));
+		playerHpSprite_[i].SetPosition(XMFLOAT3(0, -720, 0));
+		playerHpSprite_[i].SpriteTransferVertexBuffer(playerHpSprite_[i]);
+		playerHpSprite_[i].SpriteUpdate(playerHpSprite_[i], spriteCommon_);
+	}
+	//敵のHP1
+	enemyHpSprite_.SetScale(XMFLOAT2(820, 100));
+	enemyHpSprite_.SetPosition(XMFLOAT3(200, -90, 0));
+	//敵のHP2
+	enemyHp1Sprite_.SetScale(XMFLOAT2(0, 100));
+	enemyHp1Sprite_.SetPosition(XMFLOAT3(242, 10, 0));
+
+	//反映
+	//タイトル
+	titleSprite_.SpriteTransferVertexBuffer(titleSprite_);
+	titleSprite_.SpriteUpdate(titleSprite_, spriteCommon_);
+	//操作
+	operationSprite_.SpriteTransferVertexBuffer(operationSprite_);
+	operationSprite_.SpriteUpdate(operationSprite_, spriteCommon_);
+	//操作1
+	operation1Sprite_.SpriteTransferVertexBuffer(operation1Sprite_);
+	operation1Sprite_.SpriteUpdate(operation1Sprite_, spriteCommon_);
+	//操作2
+	operation2Sprite_.SpriteTransferVertexBuffer(operation2Sprite_);
+	operation2Sprite_.SpriteUpdate(operation2Sprite_, spriteCommon_);
+	//操作3
+	operation3Sprite_.SpriteTransferVertexBuffer(operation3Sprite_);
+	operation3Sprite_.SpriteUpdate(operation3Sprite_, spriteCommon_);
+	//敵のHP1
+	enemyHpSprite_.SpriteTransferVertexBuffer(enemyHpSprite_);
+	enemyHpSprite_.SpriteUpdate(enemyHpSprite_, spriteCommon_);
+	//敵のHP2
+	enemyHp1Sprite_.SpriteTransferVertexBuffer(enemyHp1Sprite_);
+	enemyHp1Sprite_.SpriteUpdate(enemyHp1Sprite_, spriteCommon_);
+	// スプライト用パイプライン生成呼び出し
+	PipelineSet spritePipelineSet = sprite_->SpriteCreateGraphicsPipeline(dxCommon_->GetDevice());
+
+	//カメラ初期化
+	Camera* newCamera = new Camera();
+	newCamera->Initialize(input_, dxInput, player_.get());
 	camera_.reset(newCamera);
 }
 
@@ -159,8 +391,9 @@ void GameScene::Draw()
 
 void GameScene::Title()
 {
+	titleTimer_++;
 	//Aボタンでゲームに移るフラグを立てる
-	if (dxInput->GamePad.state.Gamepad.wButtons & XINPUT_GAMEPAD_A)
+	if (dxInput->GamePad.state.Gamepad.wButtons & XINPUT_GAMEPAD_A && titleTimer_ >= 60)
 	{
 		moveToGameFlag_ = true;
 	}
@@ -200,6 +433,25 @@ void GameScene::Title()
 	//ゲームに移る時の更新
 	if (moveToGameFlag_ == true)
 	{
+		moveToGameTimer_++;
+
+		if (moveToGameTimer_ > 280)
+		{
+			addTitleSprite_ += 10;
+
+			//タイトル
+			titleSprite_.SetPosition(XMFLOAT3(1280, 200 + addTitleSprite_,0));
+			//操作
+			operationSprite_.SetPosition(XMFLOAT3(350, 600 + addTitleSprite_, 0));
+
+			//タイトル
+			titleSprite_.SpriteTransferVertexBuffer(titleSprite_);
+			titleSprite_.SpriteUpdate(titleSprite_, spriteCommon_);
+			//操作
+			operationSprite_.SpriteTransferVertexBuffer(operationSprite_);
+			operationSprite_.SpriteUpdate(operationSprite_, spriteCommon_);
+		}
+
 		player_->MoveToGameUpdate(matView, matProjection);
 	}
 
@@ -213,9 +465,69 @@ void GameScene::Title()
 void GameScene::Phase1()
 {
 	//カメラ更新
-	camera_->Update();
+	if (phase1Timer_ < 200)
+	{
+		camera_->Update2();
+	}
+	if (phase1Timer_ >= 200)
+	{
+		camera_->Update();
+	}
 	XMMATRIX matView = camera_->GetMatView();
 	XMMATRIX matProjection = camera_->GetMatProjection();
+
+	//敵のHP0で
+	if (enemy_->GetHp() <= 0)
+	{
+		camera_->SetGameClear();
+		scene_ = static_cast<size_t>(Scene::GameClear);
+		sceneDraw_ = static_cast<size_t>(SceneDraw::GameClearDraw);
+		//プレイヤーの弾更新
+		for (std::unique_ptr<PlayerBullet>& bullet : playerBullet_)
+		{
+			bullet->SetIsDeadTrue();
+		}
+		//プレイヤーの弾更新
+		for (std::unique_ptr<EnemyBullet>& bullet : enemyBullet_)
+		{
+			bullet->SetIsDeadTrue();
+		}
+		for (std::unique_ptr<Smoke>& smoke : enemyBulletSmoke_)
+		{
+			smoke->SetIsDeadTrue();
+		}
+		//エフェクト更新
+		for (std::unique_ptr<BreakEffect>& effect : breakEffect_)
+		{
+			effect->SetIsDeadTrue();
+		}
+	}
+
+	//プレイヤーのHP0で
+	if (player_->GetHp() <= 0)
+	{
+		scene_ = static_cast<size_t>(Scene::GameOver);
+		sceneDraw_ = static_cast<size_t>(SceneDraw::GameOverDraw);
+		//プレイヤーの弾更新
+		for (std::unique_ptr<PlayerBullet>& bullet : playerBullet_)
+		{
+			bullet->SetIsDeadTrue();
+		}
+		//プレイヤーの弾更新
+		for (std::unique_ptr<EnemyBullet>& bullet : enemyBullet_)
+		{
+			bullet->SetIsDeadTrue();
+		}
+		for (std::unique_ptr<Smoke>& smoke : enemyBulletSmoke_)
+		{
+			smoke->SetIsDeadTrue();
+		}
+		//エフェクト更新
+		for (std::unique_ptr<BreakEffect>& effect : breakEffect_)
+		{
+			effect->SetIsDeadTrue();
+		}
+	}
 
 	//当たり判定更新
 	EnmeyCollition();
@@ -250,10 +562,48 @@ void GameScene::Phase1()
 		enemyHpSprite_.SpriteUpdate(enemyHpSprite_, spriteCommon_);
 	}
 
+	//操作方法を画面外から出す処理
+	if (phase1Timer_ >= 0 && phase1Timer_ <= 100)
+	{
+		addOperationSprite_ = phase1Timer_ * 2;
+		operation1Sprite_.SetPosition(XMFLOAT3(900, 750 - addOperationSprite_, 0));
+		operation2Sprite_.SetPosition(XMFLOAT3(900, 800 - addOperationSprite_, 0));
+		operation3Sprite_.SetPosition(XMFLOAT3(900, 850 - addOperationSprite_, 0));
+
+		operation1Sprite_.SpriteTransferVertexBuffer(operation1Sprite_);
+		operation1Sprite_.SpriteUpdate(operation1Sprite_, spriteCommon_);
+		operation2Sprite_.SpriteTransferVertexBuffer(operation2Sprite_);
+		operation2Sprite_.SpriteUpdate(operation2Sprite_, spriteCommon_);
+		operation3Sprite_.SpriteTransferVertexBuffer(operation3Sprite_);
+		operation3Sprite_.SpriteUpdate(operation3Sprite_, spriteCommon_);
+	}
+
+	//プレイヤーのHPを画面外から出す処理
+	if (phase1Timer_ >= 50 && phase1Timer_ <= 150)
+	{
+		addPlayerHpSprite_ = phase1Timer_ - 50;
+		for (int i = 0; i < 5; i++)
+		{
+			playerHpSprite_[i].SetPosition(XMFLOAT3(i * 80, 740 - addPlayerHpSprite_, 0));
+			playerHpSprite_[i].SpriteTransferVertexBuffer(playerHpSprite_[i]);
+			playerHpSprite_[i].SpriteUpdate(playerHpSprite_[i], spriteCommon_);
+		}
+	}
+
 	//敵のHPのバーをどんどん増やす処理
 	if (phase1Timer_ >= 100 && phase1Timer_ <= 200)
 	{
 		addEnemyHp1Sprite_ = (phase1Timer_ - 100.0f) * addEnemyHp1SpriteNum_;
+		enemyHp1Sprite_.SetScale(XMFLOAT2(addEnemyHp1Sprite_, 100));
+
+		enemyHp1Sprite_.SpriteTransferVertexBuffer(enemyHp1Sprite_);
+		enemyHp1Sprite_.SpriteUpdate(enemyHp1Sprite_, spriteCommon_);
+	}
+
+	//敵のHPのバーをどんどん増やす処理
+	if (phase1Timer_ > 200)
+	{
+		addEnemyHp1Sprite_ = addEnemyHp1SpriteNum_ * (enemy_->GetHp() / 2);
 		enemyHp1Sprite_.SetScale(XMFLOAT2(addEnemyHp1Sprite_, 100));
 
 		enemyHp1Sprite_.SpriteTransferVertexBuffer(enemyHp1Sprite_);
@@ -337,6 +687,8 @@ void GameScene::Phase1Recollection()
 	//敵更新
 	enemy_->Update(matView, matProjection,player_->GetPosition1());
 
+	player_->SetPhase1();
+
 	//540フレームでフェーズ1に移行
 	if (Phase1RecollectionTimer_ > 480)
 	{
@@ -353,8 +705,8 @@ void GameScene::TitleDraw()
 	//スプライト共通コマンド
 	sprite_->SpriteCommonBeginDraw(dxCommon_->GetCommandList(), spriteCommon_);
 
-	titleSprite_.SpriteDraw(dxCommon_->GetCommandList(), titleSprite_, spriteCommon_, dxCommon_->GetDevice());
-	operationSprite_.SpriteDraw(dxCommon_->GetCommandList(), operationSprite_, spriteCommon_, dxCommon_->GetDevice());
+	titleSprite_.SpriteDraw(dxCommon_->GetCommandList(),spriteCommon_, dxCommon_->GetDevice(), titleSprite_.vbView);
+	operationSprite_.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice(), operationSprite_.vbView);
 
 	starDust_->Draw(dxCommon_->GetCommandList());
 	player_->Draw(dxCommon_->GetCommandList());
@@ -392,8 +744,18 @@ void GameScene::Phase1Draw()
 	sprite_->SpriteCommonBeginDraw(dxCommon_->GetCommandList(), spriteCommon_);
 
 	//スプライト描画
-	enemyHpSprite_.SpriteDraw(dxCommon_->GetCommandList(), enemyHpSprite_, spriteCommon_, dxCommon_->GetDevice());
-	enemyHp1Sprite_.SpriteDraw(dxCommon_->GetCommandList(), enemyHp1Sprite_, spriteCommon_, dxCommon_->GetDevice());
+	enemyHpSprite_.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice(),enemyHpSprite_.vbView);
+	enemyHp1Sprite_.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice(), enemyHp1Sprite_.vbView);
+	operation1Sprite_.SpriteDraw(dxCommon_->GetCommandList(),spriteCommon_, dxCommon_->GetDevice(), operation1Sprite_.vbView);
+	operation2Sprite_.SpriteDraw(dxCommon_->GetCommandList(),spriteCommon_, dxCommon_->GetDevice(), operation2Sprite_.vbView);
+	operation3Sprite_.SpriteDraw(dxCommon_->GetCommandList(),spriteCommon_, dxCommon_->GetDevice(), operation3Sprite_.vbView);
+	for (int i = 0; i < 5; i++)
+	{
+		if (i < player_->GetHp())
+		{
+			playerHpSprite_[i].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice(), playerHpSprite_[i].vbView);
+		}
+	}
 }
 
 void GameScene::Phase1RecollectionDraw()
@@ -415,6 +777,8 @@ void GameScene::EnmeyCollition()
 		float z = bullet->GetPosition().z - enemy_->GetPosition().z;
 		if ((x * x) + (y * y) + (z * z) <= 2000)
 		{
+			//enemy_->SetHp(enemy_->GetHp() - 1);
+			enemy_->SetHp(0);
 			std::unique_ptr<BreakEffect> newEffect = std::make_unique<BreakEffect>();
 			newEffect->Initialize(dxCommon_->GetDevice(), starDustModel_.get(), bullet->GetPosition());
 			breakEffect_.push_back(std::move(newEffect));
@@ -434,6 +798,7 @@ void GameScene::PlayerCollition()
 		float z = bullet->GetPosition().z - player_->GetPosition1().z;
 		if ((x * x) + (y * y) + (z * z) <= 25)
 		{
+			player_->SetHp(player_->GetHp() - 1);
 			std::unique_ptr<BreakEffect> newEffect = std::make_unique<BreakEffect>();
 			newEffect->Initialize(dxCommon_->GetDevice(), starDustModel_.get(), bullet->GetPosition());
 			breakEffect_.push_back(std::move(newEffect));
@@ -452,12 +817,149 @@ void (GameScene::* GameScene::Scene_[])() =
 {
 	&GameScene::Title,
 	&GameScene::Phase1Recollection,
-	&GameScene::Phase1
+	&GameScene::Phase1,
+	& GameScene::GameClear,
+	&GameScene::GameOver,
 };
 
 void (GameScene::* GameScene::SceneDraw_[])() =
 {
 	&GameScene::TitleDraw,
 	& GameScene::Phase1RecollectionDraw,
-	&GameScene::Phase1Draw
+	& GameScene::Phase1Draw,
+	& GameScene::GameClearDraw,
+	&GameScene::GameOverDraw,
 };
+
+
+void GameScene::GameClear()
+{
+	GameClearTimer_++;
+	camera_->GameClearUpdate();
+	XMMATRIX matView = camera_->GetMatView();
+	XMMATRIX matProjection = camera_->GetMatProjection();
+
+	for (int i = 0; i < 4; i++)
+	{
+		enemySmoke2_[i]->Update(matView, matProjection);
+	}
+
+	if (GameClearTimer_ >= 250 && addGameClear_ < 250)
+	{
+		addGameClear_+= 10;
+	}
+
+	if (addGameClear_ >= 250)
+	{
+		//Aボタンでゲームに移るフラグを立てる
+		if (dxInput->GamePad.state.Gamepad.wButtons & XINPUT_GAMEPAD_A)
+		{
+			scene_ = static_cast<size_t>(Scene::Title);
+			sceneDraw_ = static_cast<size_t>(SceneDraw::TitleDraw);
+			player_->HpReset();
+			player_->SetTitle();
+			enemy_->SetTitle();
+			enemy_->HpReset();
+			SetTitle();
+			GameClearReset_();
+			Initialize();
+		}
+	}
+
+	gameClearSprite_.SetPosition(XMFLOAT3(200, -150 + addGameClear_, 0));
+	gameClearSprite_.SpriteTransferVertexBuffer(gameClearSprite_);
+	gameClearSprite_.SpriteUpdate(gameClearSprite_, spriteCommon_);
+
+
+	enemy_->Update(matView, matProjection, player_->GetPosition1());
+}
+
+void GameScene::GameClearDraw()
+{
+	enemy_->Draw(dxCommon_->GetCommandList());
+	for (int i = 0; i < 4; i++)
+	{
+		enemySmoke2_[i]->Draw(dxCommon_->GetCommandList());
+	}
+	//スプライト共通コマンド
+	sprite_->SpriteCommonBeginDraw(dxCommon_->GetCommandList(), spriteCommon_);
+	for (int i = 0; i < 2; i++)
+	{
+		curtainSprite_[i].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice(), curtainSprite_[i].vbView);
+	}
+	gameClearSprite_.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice(), gameClearSprite_.vbView);
+}
+
+void GameScene::GameOver()
+{
+	GameClearTimer_++;
+	//カメラ更新
+	camera_->Update();
+	XMMATRIX matView = camera_->GetMatView();
+	XMMATRIX matProjection = camera_->GetMatProjection();
+
+	if (GameClearTimer_ >= 250 && addGameClear_ < 250)
+	{
+		addGameClear_ += 10;
+	}
+
+	if (addGameClear_ >= 250)
+	{
+		//Aボタンでゲームに移るフラグを立てる
+		if (dxInput->GamePad.state.Gamepad.wButtons & XINPUT_GAMEPAD_A)
+		{
+			scene_ = static_cast<size_t>(Scene::Title);
+			sceneDraw_ = static_cast<size_t>(SceneDraw::TitleDraw);
+			player_->HpReset();
+			player_->SetTitle();
+			enemy_->SetTitle();
+			enemy_->HpReset();
+			SetTitle();
+			GameClearReset_();
+			Initialize();
+		}
+	}
+
+	gameOverSprite_.SetPosition(XMFLOAT3(200, -150 + addGameClear_, 0));
+	gameOverSprite_.SpriteTransferVertexBuffer(gameOverSprite_);
+	gameOverSprite_.SpriteUpdate(gameOverSprite_, spriteCommon_);
+
+	//プレイヤー更新
+	player_->GameOverUpdate(matView, matProjection);
+
+	//敵更新
+	enemy_->Update(matView, matProjection, player_->GetPosition1());
+
+	//星屑更新
+	starDust_->Update(matView, matProjection);
+
+	smoke_->Update(matView, matProjection, player_->GetPosition2(), player_->GetRotation());
+}
+
+void GameScene::GameOverDraw()
+{
+	starDust_->Draw(dxCommon_->GetCommandList());
+	player_->Draw(dxCommon_->GetCommandList());
+	smoke_->Draw(dxCommon_->GetCommandList());
+	enemy_->Draw(dxCommon_->GetCommandList());
+
+	//スプライト共通コマンド
+	sprite_->SpriteCommonBeginDraw(dxCommon_->GetCommandList(), spriteCommon_);
+
+	gameOverSprite_.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice(), gameOverSprite_.vbView);
+}
+
+void GameScene::SetTitle()
+{
+	moveToGameFlag_ = false;	//タイトルからゲーム
+	moveFromTitleFlag_ = true;
+	moveToGameTimer_ = 0;
+	addTitleSprite_ = 0;
+	Phase1RecollectionTimer_ = 0;
+	phase1Timer_ = 0;
+	addEnemyHpSprite_ = 0;
+	addEnemyHp1Sprite_ = 0;
+	addOperationSprite_ = 0;
+	addPlayerHpSprite_ = 0;
+	titleTimer_ = 0;
+}

@@ -15,6 +15,7 @@ public:
 	void Update(XMMATRIX& matView, XMMATRIX& matProjection);
 	void TitleUpdate(XMMATRIX& matView, XMMATRIX& matProjection);	//タイトル画面の処理
 	void MoveToGameUpdate(XMMATRIX& matView, XMMATRIX& matProjection);	//タイトルからゲームに移る時の処理
+	void GameOverUpdate(XMMATRIX& matView, XMMATRIX& matProjection);	//タイトルからゲームに移る時の処理
 	bool Attack();
 	void Move();
 	void Draw(ID3D12GraphicsCommandList* cmdList);
@@ -25,12 +26,15 @@ public:
 	XMFLOAT3 GetScale() { return scale_; };
 	XMFLOAT3 GetVelocity() { return velocity; };
 	bool GetGameStartFlag_() { return GameStartFlag_; };
+	float GetHp() { return hp_; };
+	void SetHp(float hp) { hp_ = hp; };
 	void setPosition(XMFLOAT3 pos);
 	void setRotation(XMFLOAT3 rot);
 	void setScale(XMFLOAT3 sca);
 	//シーン切り替え時のセッター
 	void SetTitle();
 	void SetPhase1();
+	void HpReset() { hp_ = 5; };
 private:
 	/*DirectXCommon* dx_ = nullptr;*/
 	ID3D12Device* device_;

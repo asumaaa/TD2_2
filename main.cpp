@@ -1,13 +1,14 @@
 #include "main.h"
 #include "FPS.h"
 #include "DXInput.h"
+#include "Pera.h"
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
 	//ウィンドウ生成
 	WinApp* win = nullptr;
 	win = WinApp::GetInstance();
-	win->CreateWindow_(L"DirectX");
+	win->CreateWindow_(L"スペースラッシュ");
 
 	Masage* masage;	//メッセージ
 	masage = Masage::GetInstance();
@@ -21,6 +22,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	Input* input = nullptr;
 	input = Input::GetInstance();
 	input->Initialize(win);
+
+	/*Pera* pera_ = new Pera();
+	pera_->Initialize(dx->GetDevice(), dx);*/
 
 	//ゲームシーン
 	GameScene* gameScene = nullptr;
@@ -48,9 +52,22 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 		gameScene->Update();
 
+		/*pera_->Update();*/
+
+		/*dx->PeraPreDraw();*/
+
+
+		/*if (pera_->GetMode() != 0) {
+			pera_->Draw();
+		}*/
+
+		/*dx->PeraPostDraw();*/
+
+
 		dx->PreDraw();
-		// 4. 描画コマンド
+
 		gameScene->Draw();
+		/*pera_->Draw();*/
 
 		dx->PostDraw();
 
@@ -59,7 +76,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	
 	//FPS固定を解除
 	fps->FpsControlEnd();
-	dx->EndImgui();
+	/*dx->EndImgui();*/
 
 	delete fps;
 	delete gameScene;

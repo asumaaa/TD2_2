@@ -18,15 +18,18 @@ public:
 	void Initialize(Input* input, DXInput* dxInput,Player* player);
 	//更新
 	void Update();
+	void Update2();
 	void TitleUpdate();	//タイトルのカメラの処理
 	void MoveToGameUpdate();	//タイトルのカメラの処理
 	void Phase1RecollectionUpdate();	//フェーズ1のゲーム始まる前の処理
+	void GameClearUpdate();	//フェーズ1のゲーム始まる前の処理
 	//プレイヤーの後ろをつける挙動
 	void homind();
 	void TitleHomind();
 	//ゲッターセッター
 	void SetTarget(XMFLOAT3 pos);
 	void SetEye(XMFLOAT3 pos);
+	void SetGameClear();
 	XMFLOAT3 GetEye() { return eye_; };
 	XMFLOAT3 GetTraget() { return target_; };
 	XMFLOAT3 GetUp() { return up_; };

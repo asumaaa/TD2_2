@@ -65,11 +65,12 @@ public:
 
 	//スプライト1枚分のデータ
 
-private:
 	//頂点バッファ
 	ComPtr<ID3D12Resource> vertBuff;
 	//頂点バッファビュー
 	D3D12_VERTEX_BUFFER_VIEW vbView{};
+
+private:
 	//定数バッファ
 	ComPtr<ID3D12Resource> constBuff;
 	//Z軸回りの回転角
@@ -97,7 +98,7 @@ private:
 public:
 
 	//スプライト生成
-	Sprite SpriteCreate(ID3D12Device* dev, int window_width, int window_height);
+	void SpriteCreate(ID3D12Device* dev, int window_width, int window_height);
 
 	//スプライト共通データ生成
 	SpriteCommon SpriteCommonCreate(ID3D12Device* dev, int window_width, int window_height);
@@ -107,7 +108,8 @@ public:
 
 	//スプライト単体描画
 
-	void SpriteDraw(ID3D12GraphicsCommandList* cmdList, const Sprite& sprite, const SpriteCommon& spriteCommon, ID3D12Device* dev);
+	void SpriteDraw(ID3D12GraphicsCommandList* cmdList_, const SpriteCommon& spriteCommon, ID3D12Device* dev, 
+		D3D12_VERTEX_BUFFER_VIEW& vbView);
 
 	//スプライト単体更新
 	void SpriteUpdate(Sprite& sprite, const SpriteCommon& spriteCommon);
@@ -127,4 +129,3 @@ public:
 
 	void Release();
 };
-

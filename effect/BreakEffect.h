@@ -15,6 +15,7 @@ public:
 	void Update(XMMATRIX& matView, XMMATRIX& matProjection);
 	void Draw(ID3D12GraphicsCommandList* cmdList);
 	bool IsDead()const { return isDead_; }
+	void SetIsDeadTrue() { isDead_ = true; };
 private:
 	/*DirectXCommon* dx_;*/
 	ID3D12Device* device_;

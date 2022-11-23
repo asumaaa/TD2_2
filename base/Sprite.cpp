@@ -220,12 +220,12 @@ void Sprite::SetPiplineSet(PipelineSet piplineSet)
 	//Sprite::PipelineSet::pipelinestate = piplineSet.pipelinestate;
 }
 
-Sprite Sprite::SpriteCreate(ID3D12Device* dev, int window_width, int window_height) {
+void Sprite::SpriteCreate(ID3D12Device* dev, int window_width, int window_height) {
 
 	HRESULT result = S_FALSE;
 
 	//新しいスプライトを作る
-	Sprite sprite{};
+	/*Sprite sprite{};*/
 
 	//頂点データ
 	VertexPosUv vertices[] = {
@@ -235,11 +235,13 @@ Sprite Sprite::SpriteCreate(ID3D12Device* dev, int window_width, int window_heig
 		{{100.0f,	0.0f,	0.0f},{1.0f,0.0f}},
 	};
 
+	UINT sizeVB = static_cast<UINT>(sizeof(VertexPosUv) * _countof(vertices));
+
 	// ヒーププロパティ
 	CD3DX12_HEAP_PROPERTIES heapPropsVertexBuffer = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
 	// リソース設定
 	CD3DX12_RESOURCE_DESC resourceDescVertexBuffer =
-		CD3DX12_RESOURCE_DESC::Buffer(sizeof(VertexPosUv));
+		CD3DX12_RESOURCE_DESC::Buffer(sizeof(vertices));
 
 	//頂点バッファ生成
 	result = dev->CreateCommittedResource(
@@ -248,22 +250,22 @@ Sprite Sprite::SpriteCreate(ID3D12Device* dev, int window_width, int window_heig
 		&resourceDescVertexBuffer, // リソース設定
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr,
-		IID_PPV_ARGS(&sprite.vertBuff));
+		IID_PPV_ARGS(&vertBuff));
 	assert(SUCCEEDED(result));
 
 	//頂点バッファへのデータ転送
 	VertexPosUv* vertMap = nullptr;
-	result = sprite.vertBuff->Map(0, nullptr, (void**)&vertMap);
+	result = vertBuff->Map(0, nullptr, (void**)&vertMap);
 	memcpy(vertMap, vertices, sizeof(vertices));
-	sprite.vertBuff->Unmap(0, nullptr);
+	vertBuff->Unmap(0, nullptr);
 
 	// 頂点バッファビューの作成
 	// GPU仮想アドレス
-	sprite.vbView.BufferLocation = sprite.vertBuff->GetGPUVirtualAddress();
+	vbView.BufferLocation = vertBuff->GetGPUVirtualAddress();
 	// 頂点バッファのサイズ
-	sprite.vbView.SizeInBytes = sizeof(vertices);
+	vbView.SizeInBytes = sizeof(vertices);
 	// 頂点1つ分のデータサイズ
-	sprite.vbView.StrideInBytes = sizeof(vertices[0]);
+	vbView.StrideInBytes = sizeof(vertices[0]);
 
 	// ヒーププロパティ
 	CD3DX12_HEAP_PROPERTIES heapPropsConstantBuffer = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
@@ -278,20 +280,18 @@ Sprite Sprite::SpriteCreate(ID3D12Device* dev, int window_width, int window_heig
 		&resourceDescConstantBuffer, // リソース設定
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr,
-		IID_PPV_ARGS(&sprite.constBuff));
+		IID_PPV_ARGS(&constBuff));
 	assert(SUCCEEDED(result));
 
 	// 定数バッファにデータ転送
 	ConstBufferData* constMap = nullptr;
-	result = sprite.constBuff->Map(0, nullptr, (void**)&constMap); // マッピング
+	result = constBuff->Map(0, nullptr, (void**)&constMap); // マッピング
 	constMap->color = XMFLOAT4(1, 1, 1, 1);
 	assert(SUCCEEDED(result));
 
 	//平行投影行列
 	constMap->mat = XMMatrixOrthographicOffCenterLH(0.0f, window_width, window_height, 0.0f, 0.0f, 1.0f);
-	sprite.constBuff->Unmap(0, nullptr);
-
-	return sprite;
+	constBuff->Unmap(0, nullptr);
 }
 //スプライト共通グラフィックスコマンドのセット
 void Sprite::SpriteCommonBeginDraw(ID3D12GraphicsCommandList* cmdList, const SpriteCommon& spriteCommon) {
@@ -310,19 +310,20 @@ void Sprite::SpriteCommonBeginDraw(ID3D12GraphicsCommandList* cmdList, const Spr
 
 //スプライト単体描画
 
-void Sprite::SpriteDraw(ID3D12GraphicsCommandList* cmdList, const Sprite& sprite, const SpriteCommon& spriteCommon, ID3D12Device* dev) {
+void Sprite::SpriteDraw(ID3D12GraphicsCommandList* cmdList_,  const SpriteCommon& spriteCommon, ID3D12Device* dev, 
+	D3D12_VERTEX_BUFFER_VIEW& vbView) {
 
-	//this->cmmandList = dx->GetCommandList();
+	this->cmdList = cmdList_;
 
 	// 頂点バッファの設定コマンド
-	cmdList->IASetVertexBuffers(0, 1, &sprite.vbView);
+	cmdList->IASetVertexBuffers(0, 1, &vbView);
 
 	// 定数バッファ(CBV)の設定コマンド
-	cmdList->SetGraphicsRootConstantBufferView(0, sprite.constBuff->GetGPUVirtualAddress());
+	cmdList->SetGraphicsRootConstantBufferView(0, constBuff->GetGPUVirtualAddress());
 
 	//シェーダーリソースビューをセット
 	cmdList->SetGraphicsRootDescriptorTable(1, CD3DX12_GPU_DESCRIPTOR_HANDLE(spriteCommon.descHeap->GetGPUDescriptorHandleForHeapStart(),
-		sprite.texNumber, dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
+		texNumber, dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
 
 	//ポリゴンの描画
 	cmdList->DrawInstanced(4, 1, 0, 0);

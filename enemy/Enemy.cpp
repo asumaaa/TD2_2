@@ -96,3 +96,11 @@ void Enemy::setScale(XMFLOAT3 sca)
 {
 	scale_ = sca;
 }
+
+void Enemy::SetTitle()
+{
+	phase1Timer1_ = 0;
+	phase1Timer2_ = 0;
+	phase1Flag = false;
+	bulletTimer_ = 0;
+}

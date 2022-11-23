@@ -116,11 +116,27 @@ void Player::MoveToGameUpdate(XMMATRIX& matView, XMMATRIX& matProjection)
 	object3d_->Update(matView, matProjection);
 
 	//400フレーム消費したらゲームに移るフラグを送る
-	if (moveToGameTimer_ == 400)
+	if (moveToGameTimer_ == 600)
 	{
 		GameStartFlag_ = true;
-		moveToGameTimer_  = 0;
 	}
+}
+
+void Player::GameOverUpdate(XMMATRIX& matView, XMMATRIX& matProjection)
+{
+	position1_.x += velocity.x * speed;
+	position1_.y += velocity.y * speed;
+	position1_.z += velocity.z * speed;
+
+	position2_.x += velocity.x * speed;
+	position2_.y -= 0.1;
+	position2_.z += velocity.z * speed;
+
+	object3d_->setScale(scale_);
+	object3d_->setRotation(rotation2_);
+	object3d_->setPosition(position2_);
+	//オブジェクト更新
+	object3d_->Update(matView, matProjection);
 }
 
 bool Player::Attack()
@@ -143,7 +159,7 @@ void Player::Move()
 
 	//左ステックの変数
 	float x = dxInput_->GamePad.state.Gamepad.sThumbLY / (32767.0f) * (PI / 90.0f);
-	float y = dxInput_->GamePad.state.Gamepad.sThumbLX / (32767.0f) * (PI / 90.0f) * 0.7f;
+	float y = dxInput_->GamePad.state.Gamepad.sThumbLX / (32767.0f) * (PI / 90.0f);
 	//上下
 	if (dxInput_->GamePad.state.Gamepad.sThumbLY > 15000 || dxInput_->GamePad.state.Gamepad.sThumbLY < -15000)
 	{
@@ -244,6 +260,15 @@ void Player::setScale(XMFLOAT3 sca)
 
 void Player::SetTitle()
 {
+	speed = 1.0f;
+	speed2 = 1.0f;
+
+	bulletTimer_ = 4;
+
+
+	moveToGameTimer_ = 0;
+	GameStartFlag_ = false;
+
 	scale_ = { 1,1,1 };
 	rotation1_ = { 0,0,0 };	//プレイヤー本来の角度
 	rotation2_ = { 0,0,0 };	//オブジェクトに渡す角度
@@ -253,6 +278,7 @@ void Player::SetTitle()
 
 void Player::SetPhase1()
 {
+	phase1Timer_ = 0;
 	scale_ = { 1,1,1 };
 	rotation1_ = { 0,0,0 };	//プレイヤー本来の角度
 	rotation2_ = { PI * 25/180,0,0};	//オブジェクトに渡す角度

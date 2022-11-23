@@ -42,6 +42,37 @@ void Camera::Update()
 	matView_ = XMMatrixLookAtLH(XMLoadFloat3(&eye_), XMLoadFloat3(&target_), XMLoadFloat3(&up_));
 }
 
+void Camera::Update2()
+{
+	float x = 0;
+	float y = 0;
+	float z = 0;
+
+	//カメラをプレイヤーの真後ろに移動
+	x = player_->GetPosition1().x + (/*sin(-player_->GetRotation().x + (PI / 2) + lengthX_) **/ cos(-player_->GetRotation().y - (PI / 2) + lengthX_) * length_);
+	y = player_->GetPosition1().y + (cos(-player_->GetRotation().x + (PI * 18 / 40)) * length_);
+	z = player_->GetPosition1().z + (/*sin(-player_->GetRotation().x + (PI / 2) + lengthZ_) **/ sin(-player_->GetRotation().y - (PI / 2) + lengthZ_) * length_);
+
+
+	//天井を調整
+	if (sin(-player_->GetRotation().x + (PI / 2)) <= 0)
+	{
+		up_ = { 0,-1,0 };
+	}
+	else
+	{
+		up_ = { 0,1,0 };
+	}
+	up_ = { 0,1,0 };
+
+	//カメラの座標に代入
+	eye_ = { x,y,z };
+	//注視点をプレイヤーの座標にする
+	target_ = { player_->GetPosition1().x ,player_->GetPosition1().y,player_->GetPosition1().z };
+	//行列計算
+	matView_ = XMMatrixLookAtLH(XMLoadFloat3(&eye_), XMLoadFloat3(&target_), XMLoadFloat3(&up_));
+}
+
 void Camera::TitleUpdate()
 {
 	TitleHomind();
@@ -90,6 +121,15 @@ void Camera::Phase1RecollectionUpdate()
 		target_.x += 0.1;
 	}
 
+	matView_ = XMMatrixLookAtLH(XMLoadFloat3(&eye_), XMLoadFloat3(&target_), XMLoadFloat3(&up_));
+}
+
+void Camera::GameClearUpdate()
+{
+	eye_.x += 0.1;
+	target_.x += 0.1;
+	eye_.y += 0.1;
+	target_.y += 0.1;
 	matView_ = XMMatrixLookAtLH(XMLoadFloat3(&eye_), XMLoadFloat3(&target_), XMLoadFloat3(&up_));
 }
 
@@ -231,4 +271,10 @@ void Camera::SetTarget(XMFLOAT3 pos)
 void Camera::SetEye(XMFLOAT3 pos)
 {
 	eye_ = pos;
+}
+
+void Camera::SetGameClear()
+{
+	eye_ = { -60,20,-150 };
+	target_ = { -20,0,0 };
 }

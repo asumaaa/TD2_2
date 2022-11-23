@@ -20,9 +20,13 @@ public:
 	XMFLOAT3 GetPosition() { return position_; };
 	XMFLOAT3 GetRotation() { return rotation_; };
 	XMFLOAT3 GetScale() { return scale_; };
+	float GetHp() { return hp_; };
+	void SetHp(float hp) { hp_ = hp; };
 	void setPosition(XMFLOAT3 pos);
 	void setRotation(XMFLOAT3 rot);
 	void setScale(XMFLOAT3 sca);
+	void HpReset() { hp_ = 200; };
+	void SetTitle();
 private:
 	/*DirectXCommon* dx_ = nullptr;*/
 	ID3D12Device* device_;
@@ -45,6 +49,6 @@ private:
 	int bulletTimer_ = 0;
 
 	//‘Ì—Í
-	float hp_ = 100;
+	float hp_ = 200;
 };
 
