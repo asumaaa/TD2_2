@@ -165,18 +165,18 @@ void Player::Move()
 	{
 		if (rotation1_.x < PI / 4 && rotation1_.x > -PI / 4)
 		{
-			rotation1_.x -= x;
-			rotation2_.x -= x;
+			rotation1_.x -= x /2;
+			rotation2_.x -= x /2;
 		}
 		if (rotation1_.x > PI / 4)
 		{
-			rotation1_.x = PI / 4 - x;
-			rotation2_.x = PI / 4 - x;
+			rotation1_.x = PI / 4 - x /2;
+			rotation2_.x = PI / 4 - x /2;
 		}
 		if (rotation1_.x < -PI / 4)
 		{
-			rotation1_.x = -PI / 4 - x;
-			rotation2_.x = -PI / 4 - x;
+			rotation1_.x = -PI / 4 - x /2;
+			rotation2_.x = -PI / 4 - x /2;
 		}
 	}
 	//¶‰E

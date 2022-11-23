@@ -49,6 +49,6 @@ private:
 	int bulletTimer_ = 0;
 
 	//‘Ì—Í
-	float hp_ = 200;
+	float hp_ = 150;
 };
 

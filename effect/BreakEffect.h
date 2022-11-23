@@ -22,7 +22,7 @@ private:
 	Model* model_;
 
 	//爆発エフェクトの数
-	int breakEffectNum = 30;
+	int breakEffectNum = 60;
 
 	std::list<std::unique_ptr<Object3D>> object3Ds_;
 

@@ -7,6 +7,8 @@ GameScene::GameScene()
 GameScene::~GameScene()
 {
 	delete dxInput;
+	//XAudio2解放
+	xAudio2.Reset();
 	/*delete &titleSprite_;
 	delete &spriteCommon_;
 	delete sprite_;*/
@@ -19,6 +21,7 @@ GameScene::~GameScene()
 
 void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 {
+	HRESULT result;
 	this->dxCommon_ = dxCommon;
 	this->input_ = input;
 
@@ -80,6 +83,15 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 		enemySmoke2_[i].reset(newSmoke2);
 	}
 
+
+	//XAudioエンジンのインスタンスを生成
+	result = XAudio2Create(&xAudio2, 0, XAUDIO2_DEFAULT_PROCESSOR);
+	//マスターボイスを生成
+	result = xAudio2->CreateMasteringVoice(&masterVoice);
+
+	//音
+	/*SoundData BGMSoundData = BGMSound->SoundLoadWave("Resources/sound/shot1.wav");*/
+
 	//スプライト初期化
 	spriteCommon_ = sprite_->SpriteCommonCreate(dxCommon_->GetDevice(), 1280, 720);
 	sprite_->SpriteCommonLoadTexture(spriteCommon_, 0, L"Resources/title.png", dxCommon_->GetDevice());
@@ -93,7 +105,14 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 	sprite_->SpriteCommonLoadTexture(spriteCommon_, 8, L"Resources/curtain.png", dxCommon_->GetDevice());
 	sprite_->SpriteCommonLoadTexture(spriteCommon_, 9, L"Resources/gameclear.png", dxCommon_->GetDevice());
 	sprite_->SpriteCommonLoadTexture(spriteCommon_, 10, L"Resources/gameover.png", dxCommon_->GetDevice());
+	sprite_->SpriteCommonLoadTexture(spriteCommon_, 11, L"Resources/gametitle_4.png", dxCommon_->GetDevice());
 	titleSprite_.SpriteCreate(dxCommon_->GetDevice(), 1280, 720);
+	pushSprite_.SpriteCreate(dxCommon_->GetDevice(), 1280, 720);
+	pushSprite_.SetTexNumber(11);
+	pushSprite_.SetScale(XMFLOAT2(564, 71));
+	pushSprite_.SetPosition(XMFLOAT3(0, 620, 0));
+	pushSprite_.SpriteTransferVertexBuffer(pushSprite_);
+	pushSprite_.SpriteUpdate(pushSprite_, spriteCommon_);
 	operationSprite_.SpriteCreate(dxCommon_->GetDevice(), 1280, 720);	//oparation.png
 	operation1Sprite_.SpriteCreate(dxCommon_->GetDevice(), 1280, 720);	//oparation1.png
 	operation2Sprite_.SpriteCreate(dxCommon_->GetDevice(), 1280, 720);	//oparation2.png
@@ -200,53 +219,6 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 
 void GameScene::Initialize()
 {
-	////プレイヤーのモデル初期化
-	//Model* newModel = new Model();
-	//newModel->Initialize(dxCommon_->GetDevice(), "fighter", "Resources/fighter.png");
-	//playerModel_.reset(newModel);
-
-	////敵のモデル初期化
-	//Model* newEnemyModel = new Model();
-	//newEnemyModel->Initialize(dxCommon_->GetDevice(), "boss", "Resources/boss.png");
-	//enemyModel_.reset(newEnemyModel);
-
-	////弾のモデルの初期化
-	//Model* newBulletModel = new Model();
-	//newBulletModel->Initialize(dxCommon_->GetDevice(), "bullet", "Resources/bullet.png");
-	//bulletModel_.reset(newBulletModel);
-
-	////敵の弾のモデルの初期化
-	//Model* newEnemyBulletModel = new Model();
-	//newEnemyBulletModel->Initialize(dxCommon_->GetDevice(), "enemyBullet", "Resources/enemyBullet.png");
-	//enemyBulletModel_.reset(newEnemyBulletModel);
-
-	////星屑のモデルの初期化
-	//Model* newStarModel = new Model();
-	//newStarModel->Initialize(dxCommon_->GetDevice(), "star", "Resources/star.png");
-	//starDustModel_.reset(newStarModel);
-
-	////プレイヤー初期化
-	//Player* newPlayer = new Player();
-	//newPlayer->Initialize(dxCommon_->GetDevice(), playerModel_.get(), dxInput);
-	//player_.reset(newPlayer);
-	////座標をセット
-	//player_->SetTitle();
-
-	////プレイヤーの煙初期化
-	//Smoke* newSmoke = new Smoke();
-	//newSmoke->Initialize(dxCommon_->GetDevice(), starDustModel_.get(), player_->GetPosition1());
-	//smoke_.reset(newSmoke);
-
-	////敵初期化
-	//Enemy* newEnemy = new Enemy();
-	//newEnemy->Initialize(dxCommon_->GetDevice(), enemyModel_.get());
-	//enemy_.reset(newEnemy);
-
-	////星屑初期化
-	//StarDust* newStarDust = new StarDust();
-	//newStarDust->Initialize(dxCommon_->GetDevice(), starDustModel_.get());
-	//starDust_.reset(newStarDust);
-
 	//プレイヤーの煙初期化
 	for (int i = 0; i < 4; i++)
 	{
@@ -271,7 +243,14 @@ void GameScene::Initialize()
 	sprite_->SpriteCommonLoadTexture(spriteCommon_, 8, L"Resources/curtain.png", dxCommon_->GetDevice());
 	sprite_->SpriteCommonLoadTexture(spriteCommon_, 9, L"Resources/gameclear.png", dxCommon_->GetDevice());
 	sprite_->SpriteCommonLoadTexture(spriteCommon_, 10, L"Resources/gameover.png", dxCommon_->GetDevice());
+	sprite_->SpriteCommonLoadTexture(spriteCommon_, 11, L"Resources/gametitle_4.png", dxCommon_->GetDevice());
 	titleSprite_.SpriteCreate(dxCommon_->GetDevice(), 1280, 720);
+	pushSprite_.SpriteCreate(dxCommon_->GetDevice(), 1280, 720);
+	pushSprite_.SetTexNumber(11);
+	pushSprite_.SetScale(XMFLOAT2(564, 71));
+	pushSprite_.SetPosition(XMFLOAT3(0, 620, 0));
+	pushSprite_.SpriteTransferVertexBuffer(pushSprite_);
+	pushSprite_.SpriteUpdate(pushSprite_, spriteCommon_);
 	operationSprite_.SpriteCreate(dxCommon_->GetDevice(), 1280, 720);	//oparation.png
 	operation1Sprite_.SpriteCreate(dxCommon_->GetDevice(), 1280, 720);	//oparation1.png
 	operation2Sprite_.SpriteCreate(dxCommon_->GetDevice(), 1280, 720);	//oparation2.png
@@ -395,6 +374,7 @@ void GameScene::Title()
 	//Aボタンでゲームに移るフラグを立てる
 	if (dxInput->GamePad.state.Gamepad.wButtons & XINPUT_GAMEPAD_A && titleTimer_ >= 60)
 	{
+		/*BGMSound->SoundStopWave(xAudio2.Get(), BGMSoundData);*/
 		moveToGameFlag_ = true;
 	}
 
@@ -423,6 +403,10 @@ void GameScene::Title()
 	XMMATRIX matView = camera_->GetMatView();
 	XMMATRIX matProjection = camera_->GetMatProjection();
 	
+	/*if (dxInput->GamePad.state.Gamepad.wButtons & XINPUT_GAMEPAD_B)
+	{
+		BGMSound->SoundPlayWave(xAudio2.Get(), BGMSoundData);
+	}*/
 
 	//プレイヤー更新
 	//タイトル画面
@@ -603,7 +587,7 @@ void GameScene::Phase1()
 	//敵のHPのバーをどんどん増やす処理
 	if (phase1Timer_ > 200)
 	{
-		addEnemyHp1Sprite_ = addEnemyHp1SpriteNum_ * (enemy_->GetHp() / 2);
+		addEnemyHp1Sprite_ = addEnemyHp1SpriteNum_ * (enemy_->GetHp() * 2/3);
 		enemyHp1Sprite_.SetScale(XMFLOAT2(addEnemyHp1Sprite_, 100));
 
 		enemyHp1Sprite_.SpriteTransferVertexBuffer(enemyHp1Sprite_);
@@ -777,8 +761,8 @@ void GameScene::EnmeyCollition()
 		float z = bullet->GetPosition().z - enemy_->GetPosition().z;
 		if ((x * x) + (y * y) + (z * z) <= 2000)
 		{
-			//enemy_->SetHp(enemy_->GetHp() - 1);
-			enemy_->SetHp(0);
+			enemy_->SetHp(enemy_->GetHp() - 1);
+			/*enemy_->SetHp(0);*/
 			std::unique_ptr<BreakEffect> newEffect = std::make_unique<BreakEffect>();
 			newEffect->Initialize(dxCommon_->GetDevice(), starDustModel_.get(), bullet->GetPosition());
 			breakEffect_.push_back(std::move(newEffect));
@@ -870,6 +854,11 @@ void GameScene::GameClear()
 	gameClearSprite_.SpriteTransferVertexBuffer(gameClearSprite_);
 	gameClearSprite_.SpriteUpdate(gameClearSprite_, spriteCommon_);
 
+	pushSprite_.SetScale(XMFLOAT2(564, 71));
+	pushSprite_.SetPosition(XMFLOAT3(360, 720 - addGameClear_, 0));
+	pushSprite_.SpriteTransferVertexBuffer(pushSprite_);
+	pushSprite_.SpriteUpdate(pushSprite_, spriteCommon_);
+
 
 	enemy_->Update(matView, matProjection, player_->GetPosition1());
 }
@@ -888,6 +877,7 @@ void GameScene::GameClearDraw()
 		curtainSprite_[i].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice(), curtainSprite_[i].vbView);
 	}
 	gameClearSprite_.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice(), gameClearSprite_.vbView);
+	pushSprite_.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice(), pushSprite_.vbView);
 }
 
 void GameScene::GameOver()
@@ -924,6 +914,11 @@ void GameScene::GameOver()
 	gameOverSprite_.SpriteTransferVertexBuffer(gameOverSprite_);
 	gameOverSprite_.SpriteUpdate(gameOverSprite_, spriteCommon_);
 
+	pushSprite_.SetScale(XMFLOAT2(564, 71));
+	pushSprite_.SetPosition(XMFLOAT3(360, 720 - addGameClear_, 0));
+	pushSprite_.SpriteTransferVertexBuffer(pushSprite_);
+	pushSprite_.SpriteUpdate(pushSprite_, spriteCommon_);
+
 	//プレイヤー更新
 	player_->GameOverUpdate(matView, matProjection);
 
@@ -947,6 +942,7 @@ void GameScene::GameOverDraw()
 	sprite_->SpriteCommonBeginDraw(dxCommon_->GetCommandList(), spriteCommon_);
 
 	gameOverSprite_.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice(), gameOverSprite_.vbView);
+	pushSprite_.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice(), pushSprite_.vbView);
 }
 
 void GameScene::SetTitle()

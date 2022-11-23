@@ -122,8 +122,18 @@ private:
 	Sprite curtainSprite_[2];	//curtainHp.png
 	Sprite gameClearSprite_;	//curtainHp.png
 	Sprite gameOverSprite_;	//curtainHp.png
+	Sprite pushSprite_;	//curtainHp.png
 	//スプライト共通データ生成
 	SpriteCommon spriteCommon_;
+
+	//音
+	IXAudio2MasteringVoice* masterVoice;
+	ComPtr<IXAudio2> xAudio2;
+
+	////音ごとに生成
+	//Sound* BGMSound = new Sound;
+	////音声読み込み
+	//SoundData BGMSoundData = BGMSound->SoundLoadWave("Resources/sound/shoot.wav");
 
 	//シーン
 	enum class Scene
