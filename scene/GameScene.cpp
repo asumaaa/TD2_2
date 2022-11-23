@@ -137,7 +137,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 	{
 		curtainSprite_[i].SpriteCreate(dxCommon_->GetDevice(), 1280, 720);
 		curtainSprite_[i].SetTexNumber(8);
-		curtainSprite_[i].SetScale(XMFLOAT2(1280, 120));
+		curtainSprite_[i].SetScale(XMFLOAT2(1280, 360));
 		curtainSprite_[0].SetPosition(XMFLOAT3(0, 0, 0));
 		curtainSprite_[1].SetPosition(XMFLOAT3(0, 620, 0));
 		curtainSprite_[i].SpriteTransferVertexBuffer(curtainSprite_[i]);
@@ -275,7 +275,7 @@ void GameScene::Initialize()
 	{
 		curtainSprite_[i].SpriteCreate(dxCommon_->GetDevice(), 1280, 720);
 		curtainSprite_[i].SetTexNumber(8);
-		curtainSprite_[i].SetScale(XMFLOAT2(1280, 120));
+		curtainSprite_[i].SetScale(XMFLOAT2(1280, 360));
 		curtainSprite_[0].SetPosition(XMFLOAT3(0, 0, 0));
 		curtainSprite_[1].SetPosition(XMFLOAT3(0, 620, 0));
 		curtainSprite_[i].SpriteTransferVertexBuffer(curtainSprite_[i]);
@@ -513,6 +513,16 @@ void GameScene::Phase1()
 		}
 	}
 
+	addCurtain_ -= phase1Timer_ * 4;
+
+	for (int i = 0; i < 2; i++)
+	{
+		curtainSprite_[0].SetPosition(XMFLOAT3(0, -240 + addCurtain_, 0));
+		curtainSprite_[1].SetPosition(XMFLOAT3(0, 620 - addCurtain_, 0));
+		curtainSprite_[i].SpriteTransferVertexBuffer(curtainSprite_[i]);
+		curtainSprite_[i].SpriteUpdate(curtainSprite_[i], spriteCommon_);
+	}
+
 	//当たり判定更新
 	EnmeyCollition();
 	PlayerCollition();
@@ -682,6 +692,19 @@ void GameScene::Phase1Recollection()
 		camera_->phase1RecollectionTimerReset();
 		Phase1RecollectionTimerReset();
 	}
+
+	if (Phase1RecollectionTimer_ > 360)
+	{
+		addCurtain_ += 2;
+	}
+
+	for (int i = 0; i < 2; i++)
+	{
+		curtainSprite_[0].SetPosition(XMFLOAT3(0, -240 + addCurtain_, 0));
+		curtainSprite_[1].SetPosition(XMFLOAT3(0, 620 - addCurtain_, 0));
+		curtainSprite_[i].SpriteTransferVertexBuffer(curtainSprite_[i]);
+		curtainSprite_[i].SpriteUpdate(curtainSprite_[i], spriteCommon_);
+	}
 }
 
 void GameScene::TitleDraw()
@@ -740,15 +763,23 @@ void GameScene::Phase1Draw()
 			playerHpSprite_[i].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice(), playerHpSprite_[i].vbView);
 		}
 	}
+	for (int i = 0; i < 2; i++)
+	{
+		curtainSprite_[i].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice(), curtainSprite_[i].vbView);
+	}
 }
 
 void GameScene::Phase1RecollectionDraw()
 {
-	//スプライト共通コマンド
-	sprite_->SpriteCommonBeginDraw(dxCommon_->GetCommandList(), spriteCommon_);
 
 	starDust_->Draw(dxCommon_->GetCommandList());
 	enemy_->Draw(dxCommon_->GetCommandList());
+	//スプライト共通コマンド
+	sprite_->SpriteCommonBeginDraw(dxCommon_->GetCommandList(), spriteCommon_);
+	for (int i = 0; i < 2; i++)
+	{
+		curtainSprite_[i].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice(), curtainSprite_[i].vbView);
+	}
 }
 
 void GameScene::EnmeyCollition()
@@ -848,6 +879,15 @@ void GameScene::GameClear()
 			GameClearReset_();
 			Initialize();
 		}
+	}
+
+	for (int i = 0; i < 2; i++)
+	{
+		curtainSprite_[i].SetScale(XMFLOAT2(1280, 120));
+		curtainSprite_[0].SetPosition(XMFLOAT3(0, -240, 0));
+		curtainSprite_[1].SetPosition(XMFLOAT3(0, 620, 0));
+		curtainSprite_[i].SpriteTransferVertexBuffer(curtainSprite_[i]);
+		curtainSprite_[i].SpriteUpdate(curtainSprite_[i], spriteCommon_);
 	}
 
 	gameClearSprite_.SetPosition(XMFLOAT3(200, -150 + addGameClear_, 0));
@@ -958,4 +998,5 @@ void GameScene::SetTitle()
 	addOperationSprite_ = 0;
 	addPlayerHpSprite_ = 0;
 	titleTimer_ = 0;
+	addCurtain_ = 0;
 }

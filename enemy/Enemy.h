@@ -25,7 +25,7 @@ public:
 	void setPosition(XMFLOAT3 pos);
 	void setRotation(XMFLOAT3 rot);
 	void setScale(XMFLOAT3 sca);
-	void HpReset() { hp_ = 200; };
+	void HpReset() { hp_ = 150; };
 	void SetTitle();
 private:
 	/*DirectXCommon* dx_ = nullptr;*/

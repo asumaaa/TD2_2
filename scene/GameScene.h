@@ -194,6 +194,9 @@ private:
 
 	float titleTimer_ = 0;
 
+	float addCurtain_ = 0;
+
+
 private:
 	float GameClearTimer_ = 0;
 	float addGameClear_ = 0;

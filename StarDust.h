@@ -23,7 +23,7 @@ private:
 	Model* model_;
 
 	//¯‹û‚Ì”
-	int starDustNum = 300;
+	int starDustNum = 400;
 	//¯‹û‚Ì‘å‚«‚³
 	float starDustScale = 0.4;
 
